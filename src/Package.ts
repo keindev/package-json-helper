@@ -1,34 +1,32 @@
+import fs from 'fs';
+import path from 'path';
 import semver, { SemVer } from 'semver';
 
-import { error, ErrorType } from './errors';
 import { IBugsLocation, IPackage, JSONObject } from './types';
-import { toArray, toBugsLocation, toKeywords, toPackageObject, toString, toUrl } from './utils';
+import utils from './utils';
 
 export class Package implements IPackage {
   name: string;
   version: string;
-  description: string;
+  description?: string;
   keywords: Set<string>;
-  homepage: string;
+  homepage?: string;
   bugs?: IBugsLocation;
-  license: string;
+  license?: string;
 
   constructor(value: string | JSONObject) {
-    const data = toPackageObject(value);
-    const rawVersion = semver.clean(toString(data.version));
+    const data =
+      typeof value === 'string' || typeof value === 'undefined'
+        ? (JSON.parse(fs.readFileSync(value ?? path.resolve(process.cwd(), 'package.json'), 'utf-8')) as JSONObject)
+        : value;
 
-    if (typeof data.name !== 'string' || !data.name.length) throw error(ErrorType.NameIsUndefined);
-    if (!data.name.length) throw error(ErrorType.NameIsEmpty);
-    if (!rawVersion) throw error(ErrorType.InvalidVersion);
-    if (typeof data.license !== 'string' || !data.license.length) throw error(ErrorType.InvalidLicense);
-
-    this.name = data.name;
-    this.version = rawVersion;
-    this.description = toString(data.description);
-    this.keywords = new Set(toKeywords(toArray(data.keywords)));
-    this.homepage = toUrl(data.homepage);
-    this.bugs = toBugsLocation(data.bugs);
-    this.license = data.license;
+    this.name = utils.getName(data.name);
+    this.version = utils.getVersion(data.version);
+    this.description = utils.getString(data.description);
+    this.keywords = new Set(utils.getKeywords(data.keywords));
+    this.homepage = utils.getHomePage(data.homepage);
+    this.bugs = utils.getBugsLocation(data.bugs);
+    this.license = utils.getString(data.license);
   }
 
   get prereleaseVersion(): string {

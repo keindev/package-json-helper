@@ -29,6 +29,7 @@ export interface IPackage {
   bugs?: IBugsLocation;
   /** The license for the package. */
   license?: string;
+  /** Author of the package */
   author?: IPerson;
   /** A list of people who contributed to the package. */
   contributors?: IPerson[];
