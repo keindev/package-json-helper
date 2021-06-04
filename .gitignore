@@ -13,7 +13,6 @@
 .yarn-integrity
 /.husky/
 /.vscode/
-/typedoc.json
 babel.config.cjs
 coverage
 jest.config.cjs
