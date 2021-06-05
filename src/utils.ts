@@ -1,136 +1,63 @@
-import semver from 'semver';
+import {
+    IBugsLocation, IDirectoryLocations, IFunding, IPerson, IRepository, JSONValue, Maybe, Primitive, Type,
+} from './types';
+import { checkValue } from './utils/validators';
 
-import { IBugsLocation, IFunding, IPerson, JSONObject, JSONValue, Maybe } from './types';
-
-type Validator<T> = (value: T) => true | string;
-type ValidatorCallback<T, K> = (value: Maybe<T>, ...props: K[]) => boolean;
-type ValidatorWrapper<T, K> = (error: string, ...props: K[]) => Validator<Maybe<T>>;
-
-type Parser<T> = (value: JSONValue) => T;
-type ParserWrapperParams = { strict?: boolean; fieldName?: string };
-type ParserWrapper<T> = (validators?: Validator<Maybe<T>>[], params?: ParserWrapperParams) => Parser<T>;
-
-const NAME_MAX_LENGTH = 214;
-const STRING_MIN_LENGTH = 2;
 const URL_REGEXP = /^(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+$/;
 const EMAIL_REGEXP = /^[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*$/i;
 const PERSON_REGEXP =
   /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;
 
-const parser = <T>(callback: Parser<T>): ParserWrapper<T> => {
-  const wrapper = (validators?: Validator<Maybe<T>>[], params?: ParserWrapperParams): Parser<T> => {
-    const parserCallback = (rawValue: JSONValue): T => {
-      const value: Maybe<T> = callback(rawValue);
-      let result;
+const stringWithParams = (validators: IValidator<Maybe<string>>[]) => {
+  const callback = (value: JSONValue, params?: IParserWrapperParams): Maybe<string> =>
+    parse.string(validators, params)(value);
 
-      if (
-        validators &&
-        (params?.strict || (!params?.strict && typeof value !== 'undefined')) &&
-        validators.some(isValid => (result = isValid(value)) !== true)
-      ) {
-        throw new Error(params?.fieldName ? `${params.fieldName} - ${result}` : result);
-      }
-
-      return value;
-    };
-
-    return parserCallback;
-  };
-
-  return wrapper;
-};
-
-const validator = <T, K>(callback: ValidatorCallback<T, K>): ValidatorWrapper<T, K> => {
-  const wrapper = (error: string, ...props: K[]): Validator<Maybe<T>> => {
-    const validationCallback = (value: Maybe<T>): true | string => callback(value, ...props) || error;
-
-    return validationCallback;
-  };
-
-  return wrapper;
-};
-
-const validate = {
-  isString: validator((value: JSONValue) => typeof value === 'string'),
-  hasValidLength: validator(
-    (value: Maybe<string>, max?: number) =>
-      !!value && value.length >= STRING_MIN_LENGTH && value.length <= (max ?? Number.MAX_VALUE)
-  ),
-  hasProperties: validator((value: Maybe<JSONObject>, properties: string[]) =>
-    properties.every(name => Object.prototype.hasOwnProperty.call(value, name))
-  ),
-  isSemVer: validator((value?: string) => !!value && semver.clean(value) !== null),
-  isStringArray: validator((value: Maybe<JSONValue[]>) => !!value && value.every(item => typeof item === 'string')),
-  isMatchesRegExp: validator((value: Maybe<string>, expression: RegExp) => !!value && expression.test(value)),
-};
-
-const parse = {
-  string: parser((v: JSONValue) => (typeof v === 'string' ? v : undefined)),
-  object: parser((v: JSONValue) => (typeof v === 'object' && !Array.isArray(v) && v !== null ? v : undefined)),
-  array: parser((v: JSONValue) => (Array.isArray(v) ? v : undefined)),
-  stringWithParams: (validators: Validator<Maybe<string>>[]) => {
-    const callback = (value: JSONValue, params?: ParserWrapperParams): Maybe<string> =>
-      parse.string(validators, params)(value);
-
-    return callback;
-  },
+  return callback;
 };
 
 const utils = {
   getString: parse.stringWithParams([validate.hasValidLength('Invalid string length')]),
+  getObject: parse.object([]),
   getEmail: parse.stringWithParams([validate.isMatchesRegExp('Email address is not valid', EMAIL_REGEXP)]),
   getUrl: parse.stringWithParams([
     validate.isString('Url must be string'),
     validate.isMatchesRegExp("Url can't contain any non-URL-safe characters", URL_REGEXP),
   ]),
-  getName: parse.string(
-    [
-      validate.isString('Name must be specified'),
-      validate.hasValidLength('Name must be less than or equal to 214 characters', NAME_MAX_LENGTH),
-    ],
-    { strict: true }
-  ) as Parser<string>,
-  getVersion: parse.string(
-    [validate.isString('Invalid version'), validate.isSemVer('Version must be parseable by node-semver')],
-    { strict: true }
-  ) as Parser<string>,
-  getStringSet: (value: JSONValue, params?: ParserWrapperParams): Set<string> => {
-    const items = new Set(
-      (parse.array([validate.isStringArray('Field must be array of strings')], params)(value) ?? []) as string[]
-    );
 
-    return items;
-  },
+  getStringMap: (value: JSONValue): Map<string, string> =>
+    new Map<string, string>(
+      Object.entries(utils.getObject(value) ?? {}).map(([name, script]) => [name, utils.getString(script) ?? ''])
+    ),
   getHomePage: parse.string([
     validate.isMatchesRegExp("Homepage can't contain any non-URL-safe characters", URL_REGEXP),
   ]),
   getBugsLocation: (value: JSONValue): Maybe<IBugsLocation> => {
+    const params = { fieldName: 'Bugs location' };
     const location =
-      parse.string([validate.hasValidLength('Invalid bugs location string length')])(value) ??
-      parse.object([validate.hasProperties('Url is required field of bugs location object', ['url'])])(value);
+      utils.getString(value, params) ??
+      parse.object([validate.hasProperties('Bugs location url is required field', ['url'])])(value);
     let result;
 
     if (location) {
       result = {
         url: utils.getUrl(typeof location === 'string' ? location : location?.url, {
-          fieldName: 'Bugs location',
+          ...params,
           strict: true,
         }) as string,
-        email:
-          typeof location === 'string' ? undefined : utils.getEmail(location?.email, { fieldName: 'Bugs location' }),
+        email: typeof location === 'string' ? undefined : utils.getEmail(location?.email, params),
       };
     }
 
     return result;
   },
   getPerson: (value: JSONValue, fieldName: string): Maybe<IPerson> => {
+    const params = { fieldName: `Person (${fieldName})` };
     const person =
-      utils.getString(value) ??
+      utils.getString(value, params) ??
       parse.object([validate.hasProperties('Person name is required field', ['name'])])(value);
     let result;
 
     if (person) {
-      const params = { fieldName: `Person (${fieldName})` };
       const { name, email, url } =
         typeof person === 'string'
           ? (person.match(PERSON_REGEXP)?.groups as Partial<IPerson>)
@@ -174,6 +101,64 @@ const utils = {
       return acc;
     }, [] as IFunding[]);
   },
+  getType: parse.string([validate.isValidType('Invalid package type')]) as Parser<Type>,
+  getBin: (value: JSONValue, packageName: string): Map<string, string> => {
+    const bin = utils.getString(value, { fieldName: 'Bin' }) ?? utils.getStringMap(value);
+
+    return typeof bin === 'string' ? new Map<string, string>([[packageName, bin]]) : bin;
+  },
+  getMan: (value: JSONValue): Set<string> => {
+    const params = { fieldName: 'Man' };
+    const man = utils.getString(value, params) ?? utils.getStringSet(value, params);
+
+    return typeof man === 'string' ? new Set([man]) : man;
+  },
+  getDirectories: (value: JSONValue): Maybe<IDirectoryLocations> => utils.getObject(value),
+  getRepository: (value: JSONValue): Maybe<IRepository> => {
+    const params = { fieldName: 'Repository' };
+    const repository =
+      utils.getString(value, params) ??
+      parse.object([validate.hasProperties('Url is required field of repository object', ['url'])])(value);
+    let result;
+
+    if (repository) {
+      result = {
+        type: typeof repository === 'string' ? undefined : utils.getString(repository?.type, params),
+        url: utils.getUrl(typeof repository === 'string' ? repository : repository?.url, {
+          ...params,
+          strict: true,
+        }) as string,
+        directory: typeof repository === 'string' ? undefined : utils.getString(repository?.directory, params),
+      };
+    }
+
+    return result;
+  },
+  getPeerDependenciesMeta: (value: JSONValue): Map<string, boolean> =>
+    new Map<string, boolean>(
+      Object.entries(utils.getObject(value) ?? {}).map(([name, meta]) => [
+        name,
+        !!(
+          parse.object([
+            validate.hasProperties('Marking a peer dependency as optional is required in PeerDependenciesMeta object', [
+              'optional',
+            ]),
+          ])(meta) ?? {}
+        )?.optional,
+      ])
+    ),
+  getPublishConfig: (value: JSONValue): Map<string, Primitive> =>
+    new Map<string, Primitive>(
+      Object.entries(utils.getObject(value) ?? {}).map(([name, paramValue]) => [
+        name,
+        typeof paramValue === 'string' ||
+        typeof paramValue === 'number' ||
+        typeof paramValue === 'boolean' ||
+        paramValue === null
+          ? paramValue
+          : null,
+      ])
+    ),
 };
 
 export default utils;
