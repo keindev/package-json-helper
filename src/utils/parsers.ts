@@ -23,6 +23,7 @@ export const parsers = {
 export const cast = {
   toString: parsers.getString(),
   toObject: parsers.getObject(),
+  toArray: parsers.getArray(),
   toUrl: parsers.getString([validators.isMatchesRegExp("Url can't contain any non-URL-safe characters", URL_REGEXP)]),
   toEmail: parsers.getString([validators.isMatchesRegExp('Email address is not valid', EMAIL_REGEXP)]),
 };

@@ -1,5 +1,5 @@
 import { JSONValue } from '../types';
-import { parsers } from '../utils/parsers';
+import { cast, parsers } from '../utils/parsers';
 import { validators } from '../utils/validators';
 import { Link } from './Link';
 
@@ -15,11 +15,11 @@ export class Person extends Link {
     if (typeof data !== 'undefined') {
       const person = parsers.getObject([validators.hasProperties('Person name is required field', ['name'])])(
         typeof data === 'string' ? data.match(PERSON_REGEXP)?.groups ?? {} : data
-      ) as Partial<Person & Link>;
+      ) as Partial<Person & Link> & { name: string };
 
-      if (person.name) this.name = person.name;
-      if (person.url) this.url = person.url;
-      if (person.email) this.email = person.email;
+      this.name = person.name;
+      this.url = cast.toString(person.url);
+      this.email = cast.toString(person.email);
     } else {
       throw new Error('Person must be string or object');
     }

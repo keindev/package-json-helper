@@ -1,5 +1,5 @@
 import { JSONValue } from '../types';
-import { parsers } from '../utils/parsers';
+import { cast, parsers } from '../utils/parsers';
 import { validators } from '../utils/validators';
 import { URL } from './URL';
 
@@ -13,10 +13,10 @@ export class Funding extends URL {
     if (typeof data !== 'undefined') {
       const funding = parsers.getObject([validators.hasProperties('Url is required field of funding object', ['url'])])(
         typeof data === 'string' ? { url: data } : data
-      ) as Partial<Funding>;
+      ) as Partial<Funding> & { url: string };
 
-      if (funding.url) this.url = funding.url;
-      if (funding.type) this.type = funding.type;
+      this.url = funding.url;
+      this.type = cast.toString(funding.type);
     } else {
       throw new Error('BugsLocation must be string or object');
     }

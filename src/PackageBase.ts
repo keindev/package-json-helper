@@ -1,4 +1,10 @@
+import { BugsLocation } from './fields/Bugs';
+import { DependencyMeta } from './fields/DependencyMeta';
+import { Funding } from './fields/Funding';
+import { Person } from './fields/Person';
+import { Repository } from './fields/Repository';
 import { JSONObject } from './types';
+import { mappers } from './utils/mappers';
 import { cast, parsers } from './utils/parsers';
 import { check, URL_REGEXP, validators } from './utils/validators';
 
@@ -14,6 +20,7 @@ enum StringProps {
   Description = 'description',
   License = 'license',
   Main = 'main',
+  Types = 'types',
 }
 
 enum StringListProps {
@@ -27,13 +34,14 @@ enum StringListProps {
 }
 
 enum StringMapProps {
-  scripts = 'scripts',
-  config = 'config',
-  dependencies = 'dependencies',
-  devDependencies = 'devDependencies',
-  optionalDependencies = 'optionalDependencies',
-  peerDependencies = 'peerDependencies',
-  engines = 'engines',
+  Scripts = 'scripts',
+  Config = 'config',
+  Dependencies = 'dependencies',
+  DevDependencies = 'devDependencies',
+  OptionalDependencies = 'optionalDependencies',
+  PeerDependencies = 'peerDependencies',
+  Engines = 'engines',
+  Directories = 'directories',
 }
 
 const rules = {
@@ -50,11 +58,6 @@ type IStringListProps = { [key in StringListProps]: Set<string> };
 type IStringMapProps = { [key in StringMapProps]: Map<string, string> };
 
 class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
-  #name: string;
-  #version: string;
-  #homepage: string;
-  #type: Type;
-
   /** If set to `true`, then npm will refuse to publish it. */
   private: boolean;
   /** Package description, listed in `npm search`. */
@@ -63,45 +66,57 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   license = '';
   /** The module ID that is the primary entry point to the program. */
   main = '';
+  /** Point to bundled declaration file. */
+  types = '';
   /** Client-side module ID that is the primary entry point. */
   browser = '';
-  /** Keywords associated with package, listed in `npm search`. */
+
+  #name: string;
+  #version: string;
+  #homepage: string;
+  #type: Type;
   #keywords = new Set<string>();
-  /** The files included in the package. */
   #files = new Set<string>();
-  /** Filenames to put in place for the `man` program to find. */
   #man = new Set<string>();
-  /** Package names that are bundled when the package is published. */
   #bundledDependencies = new Set<string>();
-  /** Operating systems the module runs on. */
   #os = new Set<string>();
-  /** CPU architectures the module runs on. */
   #cpu = new Set<string>();
-  /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
   #workspaces = new Set<string>();
-  /** The executable files that should be installed into the `PATH`. */
   #bin = new Map<string, string>();
-  /** Script commands that are run at various times in the lifecycle of the package. The key is the lifecycle event, and the value is the command to run at that point. */
   #scripts = new Map<string, string>();
-  /** Is used to set configuration parameters used in package scripts that persist across upgrades. */
   #config = new Map<string, string>();
-  /** The dependencies of the package. */
   #dependencies = new Map<string, string>();
-  /** Additional tooling dependencies that are not required for the package to work. Usually test, build, or documentation tooling. */
   #devDependencies = new Map<string, string>();
-  /** Dependencies that are skipped if they fail to install. */
   #optionalDependencies = new Map<string, string>();
-  /** Dependencies that will usually be required by the package user directly or via another dependency. */
   #peerDependencies = new Map<string, string>();
-  /** Engines that this package runs on. */
   #engines = new Map<string, string>();
+  #directories = new Map<string, string>();
+  #bugs: BugsLocation;
+  #author: Person;
+  #repository: Repository;
+  #contributors: Map<string, Person>;
+  #maintainers: Map<string, Person>;
+  #funding: Map<string, Funding>;
+  #peerDependenciesMeta: Map<string, DependencyMeta>;
+  #publishConfig: Map<string, string | number | boolean>;
+
+  protected data: JSONObject;
 
   constructor(data: JSONObject) {
+    this.data = data;
+    this.private = !!data.private;
     this.#name = parsers.getString(rules.name)(data.name);
     this.#version = parsers.getString(rules.version)(data.version);
     this.#homepage = parsers.getString(rules.homepage)(data.homepage);
     this.#type = data.type ? (parsers.getString(rules.type)(data.type) as Type) : Type.Commonjs;
-    this.private = !!data.private;
+    this.#bugs = new BugsLocation(data.bugs);
+    this.#author = new Person(data.author);
+    this.#repository = new Repository(data.repository);
+    this.#contributors = mappers.toPersons(data.contributors);
+    this.#maintainers = mappers.toPersons(data.maintainers);
+    this.#funding = mappers.toFunding(data.funding);
+    this.#peerDependenciesMeta = mappers.toDependencyMeta(data.peerDependenciesMeta);
+    this.#publishConfig = mappers.toPublishConfig(data.publishConfig);
 
     Object.values(StringProps).forEach(name => (this[name] = cast.toString(data[name])));
     Object.values(StringListProps).forEach(name =>
@@ -150,64 +165,124 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
     this.#homepage = check(value, rules.homepage);
   }
 
+  /** Keywords associated with package, listed in `npm search`. */
   get keywords(): Set<string> {
     return this.#keywords;
   }
 
+  /** The files included in the package. */
   get files(): Set<string> {
     return this.#files;
   }
 
+  /** Filenames to put in place for the `man` program to find. */
   get man(): Set<string> {
     return this.#man;
   }
 
+  /** Operating systems the module runs on. */
   get os(): Set<string> {
     return this.#os;
   }
 
+  /** CPU architectures the module runs on. */
   get cpu(): Set<string> {
     return this.#cpu;
   }
 
+  /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
   get workspaces(): Set<string> {
     return this.#workspaces;
   }
 
+  /** Package names that are bundled when the package is published. */
   get bundledDependencies(): Set<string> {
     return this.#bundledDependencies;
   }
 
+  /** The executable files that should be installed into the `PATH`. */
   get bin(): Map<string, string> {
     return this.#bin;
   }
 
+  /** Script commands that are run at various times in the lifecycle of the package. The key is the lifecycle event, and the value is the command to run at that point. */
   get scripts(): Map<string, string> {
     return this.#scripts;
   }
 
+  /** Is used to set configuration parameters used in package scripts that persist across upgrades. */
   get config(): Map<string, string> {
     return this.#config;
   }
 
+  /** The dependencies of the package. */
   get dependencies(): Map<string, string> {
     return this.#dependencies;
   }
 
+  /** Additional tooling dependencies that are not required for the package to work. Usually test, build, or documentation tooling. */
   get devDependencies(): Map<string, string> {
     return this.#devDependencies;
   }
 
+  /** Dependencies that are skipped if they fail to install. */
   get optionalDependencies(): Map<string, string> {
     return this.#optionalDependencies;
   }
 
+  /** Dependencies that will usually be required by the package user directly or via another dependency. */
   get peerDependencies(): Map<string, string> {
     return this.#peerDependencies;
   }
 
+  /** Engines that this package runs on. */
   get engines(): Map<string, string> {
     return this.#engines;
+  }
+
+  /** Indicates the structure of the package. */
+  get directories(): Map<string, string> {
+    return this.#directories;
+  }
+
+  /** The URL to the package's issue tracker and/or the email address to which issues should be reported. */
+  get bugs(): BugsLocation {
+    return this.#bugs;
+  }
+
+  /** Author of the package */
+  get author(): Person {
+    return this.#author;
+  }
+
+  /** Location for the code repository. */
+  get repository(): Repository {
+    return this.#repository;
+  }
+
+  /** A list of people who contributed to the package. */
+  get contributors(): Map<string, Person> {
+    return this.#contributors;
+  }
+
+  /** A list of people who maintain the package. */
+  get maintainers(): Map<string, Person> {
+    return this.#maintainers;
+  }
+
+  /** Describes and notifies consumers of a package's monetary support information. */
+  get funding(): Map<string, Funding> {
+    return this.#funding;
+  }
+
+  /** Indicate peer dependencies that are optional. */
+  get peerDependenciesMeta(): Map<string, DependencyMeta> {
+    return this.#peerDependenciesMeta;
+  }
+
+  /** A set of config values that will be used at publish-time. It's especially handy to set the tag, registry or access, to ensure that a given package is not tagged with 'latest', published to the global public registry or that a scoped module is private by default. */
+  get publishConfig(): Map<string, string | number | boolean> {
+    return this.#publishConfig;
   }
 }
 
