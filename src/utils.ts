@@ -3,11 +3,6 @@ import {
 } from './types';
 import { checkValue } from './utils/validators';
 
-const URL_REGEXP = /^(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+$/;
-const EMAIL_REGEXP = /^[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*$/i;
-const PERSON_REGEXP =
-  /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;
-
 const stringWithParams = (validators: IValidator<Maybe<string>>[]) => {
   const callback = (value: JSONValue, params?: IParserWrapperParams): Maybe<string> =>
     parse.string(validators, params)(value);
@@ -31,25 +26,7 @@ const utils = {
   getHomePage: parse.string([
     validate.isMatchesRegExp("Homepage can't contain any non-URL-safe characters", URL_REGEXP),
   ]),
-  getBugsLocation: (value: JSONValue): Maybe<IBugsLocation> => {
-    const params = { fieldName: 'Bugs location' };
-    const location =
-      utils.getString(value, params) ??
-      parse.object([validate.hasProperties('Bugs location url is required field', ['url'])])(value);
-    let result;
 
-    if (location) {
-      result = {
-        url: utils.getUrl(typeof location === 'string' ? location : location?.url, {
-          ...params,
-          strict: true,
-        }) as string,
-        email: typeof location === 'string' ? undefined : utils.getEmail(location?.email, params),
-      };
-    }
-
-    return result;
-  },
   getPerson: (value: JSONValue, fieldName: string): Maybe<IPerson> => {
     const params = { fieldName: `Person (${fieldName})` };
     const person =

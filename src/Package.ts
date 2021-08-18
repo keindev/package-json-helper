@@ -1,54 +1,96 @@
 import fs from 'fs';
 import path from 'path';
-import semver, { SemVer } from 'semver';
 
-import Parser from './Parser';
-import { JSONObject, Type } from './types';
-import utils from './utils';
+import { BugsLocation } from './fields/Bugs';
+import { Funding } from './fields/Funding';
+import { Person } from './fields/Person';
+import PackageBase from './PackageBase';
+import { JSONObject, JSONValue } from './types';
 
-export class Package extends Parser {
+const mapPersonsTo = (list: JSONValue, map: Map<string, Person>): void => {
+  if (Array.isArray(list)) {
+    list.forEach(item => {
+      const person = new Person(item);
+
+      if (person.name) {
+        map.set(person.name, person);
+      }
+    });
+  }
+};
+
+const mapFundingTo = (list: JSONValue, map: Map<string, Funding>): void => {
+  if (Array.isArray(list)) {
+    list.forEach(item => {
+      const funding = new Funding(item);
+
+      if (funding.url) {
+        map.set(funding.url, funding);
+      }
+    });
+  }
+};
+
+export class Package extends PackageBase {
+  #contributors = new Map<string, Person>();
+  #maintainers = new Map<string, Person>();
+  #funding = new Map<string, Funding>();
+
+  /** The URL to the package's issue tracker and/or the email address to which issues should be reported. */
+  bugs: BugsLocation;
+  /** Author of the package */
+  author: Person;
+
   constructor(value: string | JSONObject) {
-    super(
+    const data =
       typeof value === 'string' || typeof value === 'undefined'
         ? (JSON.parse(fs.readFileSync(value ?? path.resolve(process.cwd(), 'package.json'), 'utf-8')) as JSONObject)
-        : value
-    );
+        : value;
 
-    this.homepage = utils.getHomePage(data.homepage);
-    this.bugs = utils.getBugsLocation(data.bugs);
+    super(data);
 
-    this.author = utils.getPerson(data.author, 'Author');
-    this.contributors = utils.getPersons(data.contributors, 'Contributors');
-    this.maintainers = utils.getPersons(data.maintainers, 'Maintainers');
-    this.funding = utils.getFunding(data.funding);
+    this.bugs = new BugsLocation(data.bugs);
+    this.author = new Person(data.author);
 
-    this.type = utils.getType(data.type) ?? Type.Commonjs;
-
-    this.bin = utils.getBin(data.bin, this.name);
-    this.man = utils.getMan(data.man);
-    this.directories = utils.getDirectories(data.directories);
-    this.repository = utils.getRepository(data.repository);
-
-    this.peerDependenciesMeta = utils.getPeerDependenciesMeta(data.peerDependenciesMeta);
-
-    this.publishConfig = utils.getPublishConfig(data.publishConfig);
-  }
-
-  get prereleaseVersion(): string {
-    return [...(semver.prerelease(this.version) ?? [])].join('.');
-  }
-
-  get semanticVersion(): SemVer {
-    return semver.coerce(this.version) as SemVer;
-  }
-
-  get cleanVersion(): string {
-    return this.semanticVersion.version;
+    mapPersonsTo(data.contributors, this.contributors);
+    mapPersonsTo(data.maintainers, this.maintainers);
+    mapFundingTo(Array.isArray(data.funding) ? data.funding : [data.funding], this.funding);
   }
 
   get scope(): string | undefined {
     return this.name.match(/^@(?<scope>[\w.-]+)\/(?<name>[\w.-]+)/i)?.groups?.scope;
   }
+
+  /** A list of people who contributed to the package. */
+  get contributors(): Map<string, Person> {
+    return this.#contributors;
+  }
+
+  /** A list of people who maintain the package. */
+  get maintainers(): Map<string, Person> {
+    return this.#maintainers;
+  }
+
+  /** Describes and notifies consumers of a package's monetary support information. */
+  get funding(): Map<string, Funding> {
+    return this.#funding;
+  }
 }
 
 export default Package;
+
+/** Indicates the structure of the package. */
+// #directories?: IDirectoryLocations;
+// this.directories = utils.getDirectories(data.directories);
+
+/** Location for the code repository. */
+// #repository?: IRepository;
+// this.repository = utils.getRepository(data.repository);
+
+/** Indicate peer dependencies that are optional. */
+// #peerDependenciesMeta: Map<string, boolean>;
+// this.peerDependenciesMeta = utils.getPeerDependenciesMeta(data.peerDependenciesMeta);
+
+/** A set of config values that will be used at publish-time. It's especially handy to set the tag, registry or access, to ensure that a given package is not tagged with 'latest', published to the global public registry or that a scoped module is private by default. */
+// #publishConfig: Map<string, Primitive>;
+// this.publishConfig = utils.getPublishConfig(data.publishConfig);
