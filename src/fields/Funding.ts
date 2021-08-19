@@ -18,7 +18,7 @@ export class Funding extends URL {
       this.url = funding.url;
       this.type = cast.toString(funding.type);
     } else {
-      throw new Error('BugsLocation must be string or object');
+      throw new Error('Funding must be string or object');
     }
   }
 }

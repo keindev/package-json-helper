@@ -18,8 +18,9 @@ export class Person extends Link {
       ) as Partial<Person & Link> & { name: string };
 
       this.name = person.name;
-      this.url = cast.toString(person.url);
-      this.email = cast.toString(person.email);
+
+      if (person.url) this.url = cast.toString(person.url);
+      if (person.email) this.email = cast.toString(person.email);
     } else {
       throw new Error('Person must be string or object');
     }

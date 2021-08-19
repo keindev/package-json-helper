@@ -7,7 +7,7 @@ type IValidatorCallback<T, K> = (value: T, ...props: K[]) => boolean;
 type IValidatorWrapper<T, K> = (error: string, ...props: K[]) => IValidator<T>;
 
 export const STRING_MIN_LENGTH = 2;
-export const URL_REGEXP = /^(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+$/;
+export const URL_REGEXP = /^[\w.-]+(?:\.[\w.-]+)?[\w!#$&'()*+,./:;=?@[\]~-]+$/;
 export const EMAIL_REGEXP = /^[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*$/i;
 
 export const check = <T>(value: T, validators: IValidator<T>[]): T => {

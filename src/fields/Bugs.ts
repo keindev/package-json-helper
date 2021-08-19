@@ -13,7 +13,8 @@ export class BugsLocation extends Link {
       ) as Partial<Link> & { url: string };
 
       this.url = location.url;
-      this.email = cast.toString(location.email);
+
+      if (location.email) this.email = cast.toString(location.email);
     } else {
       throw new Error('BugsLocation must be string or object');
     }

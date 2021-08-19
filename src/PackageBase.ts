@@ -112,6 +112,7 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
     this.#bugs = new BugsLocation(data.bugs);
     this.#author = new Person(data.author);
     this.#repository = new Repository(data.repository);
+    this.#bin = mappers.toBin(data.bin);
     this.#contributors = mappers.toPersons(data.contributors);
     this.#maintainers = mappers.toPersons(data.maintainers);
     this.#funding = mappers.toFunding(data.funding);
