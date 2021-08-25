@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "npm-run-all build:*",
-    "build:ts": "rimraf lib && tsc --extendedDiagnostics --project tsconfig.build.json",
+    "build:ts": "rimraf lib && tsc --extendedDiagnostics",
     "generate": "npm-run-all generate:*",
     "generate:changelog": "node --experimental-specifier-resolution=node node_modules/.bin/changelog generate --bump",
     "generate:ghinfo": "node --experimental-specifier-resolution=node node_modules/.bin/ghinfo generate -d media -t utils",
@@ -38,29 +38,28 @@
     "prepare:husky": "husky install",
     "release": "npm-run-all prepare lint test build generate",
     "test": "npm-run-all test:*",
-    "test:jest": "node --harmony node_modules/.bin/jest"
+    "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "engines": {
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
     "@tagproject/ts-package-shared-config": "^4.0.0",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.6.1",
+    "@types/lodash.clonedeep": "^4.5.6",
+    "@types/node": "^16.7.0",
     "@types/semver": "^7.3.8",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
-    "babel-jest": "^27.0.6",
     "changelog-guru": "^3.0.2",
     "cspell": "^5.7.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.24.0",
+    "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-optimize-regex": "^1.2.1",

@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PackageBase Parse base 1`] = `
+"{
+  \\"name\\": \\"package-json-helper\\",
+  \\"version\\": \\"0.9.0\\",
+  \\"description\\": \\"Helper for updating, comparing and fetching changes in package.json\\",
+  \\"license\\": \\"MIT\\",
+  \\"homepage\\": \\"https://github.com/keindev/package-json-helper#readme\\",
+  \\"author\\": {
+    \\"name\\": \\"Daniil Ryazanov\\",
+    \\"email\\": \\"kein@tagproject.ru\\"
+  },
+  \\"keywords\\": [
+    \\"package\\",
+    \\"json\\",
+    \\"helper\\",
+    \\"util\\"
+  ],
+  \\"types\\": \\"lib/index.d.ts\\",
+  \\"type\\": \\"module\\",
+  \\"main\\": \\"lib/index.js\\",
+  \\"bin\\": {
+    \\"\\": \\"./index.js\\"
+  },
+  \\"repository\\": {
+    \\"type\\": \\"git\\",
+    \\"url\\": \\"git+https://github.com/keindev/package-json-helper.git\\"
+  },
+  \\"engines\\": {
+    \\"node\\": \\">=14.0.0\\"
+  },
+  \\"scripts\\": {
+    \\"build\\": \\"npm-run-all build:*\\",
+    \\"build:ts\\": \\"rimraf lib && tsc --extendedDiagnostics\\",
+    \\"generate\\": \\"npm-run-all generate:*\\",
+    \\"generate:changelog\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/changelog generate --bump\\",
+    \\"generate:ghinfo\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/ghinfo generate -d media -t utils\\",
+    \\"lint\\": \\"npm-run-all lint:*\\",
+    \\"lint:eslint\\": \\"rimraf coverage && eslint \\\\\\"src/**\\\\\\" --ext .ts\\",
+    \\"lint:spell\\": \\"cspell -c .vscode/cspell.json --no-summary \\\\\\"README.md\\\\\\" \\\\\\"src/**/*.ts\\\\\\"\\",
+    \\"prepare\\": \\"npm-run-all prepare:*\\",
+    \\"prepare:config\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/ts-package-shared-config\\",
+    \\"prepare:husky\\": \\"husky install\\",
+    \\"release\\": \\"npm-run-all prepare lint test build generate\\",
+    \\"test\\": \\"npm-run-all test:*\\",
+    \\"test:jest\\": \\"node --experimental-vm-modules node_modules/.bin/jest\\"
+  },
+  \\"dependencies\\": {
+    \\"lodash.clonedeep\\": \\"^4.5.0\\",
+    \\"semver\\": \\"^7.3.5\\"
+  },
+  \\"devDependencies\\": {
+    \\"@tagproject/ts-package-shared-config\\": \\"^4.0.0\\",
+    \\"@types/jest\\": \\"^27.0.1\\",
+    \\"@types/lodash.clonedeep\\": \\"^4.5.6\\",
+    \\"@types/node\\": \\"^16.7.0\\",
+    \\"@types/semver\\": \\"^7.3.8\\",
+    \\"@typescript-eslint/eslint-plugin\\": \\"^4.29.2\\",
+    \\"@typescript-eslint/parser\\": \\"^4.29.2\\",
+    \\"changelog-guru\\": \\"^3.0.2\\",
+    \\"cspell\\": \\"^5.7.2\\",
+    \\"eslint\\": \\"^7.32.0\\",
+    \\"eslint-config-prettier\\": \\"^8.3.0\\",
+    \\"eslint-plugin-import\\": \\"^2.24.1\\",
+    \\"eslint-plugin-jest\\": \\"^24.4.0\\",
+    \\"eslint-plugin-node\\": \\"^11.1.0\\",
+    \\"eslint-plugin-optimize-regex\\": \\"^1.2.1\\",
+    \\"eslint-plugin-promise\\": \\"^5.1.0\\",
+    \\"ghinfo\\": \\"^2.0.3\\",
+    \\"husky\\": \\"^7.0.1\\",
+    \\"jest\\": \\"^27.0.6\\",
+    \\"npm-run-all\\": \\"^4.1.5\\",
+    \\"prettier\\": \\"^2.3.2\\",
+    \\"rimraf\\": \\"^3.0.2\\",
+    \\"ts-jest\\": \\"^27.0.5\\",
+    \\"typescript\\": \\"^4.3.5\\"
+  }
+}"
+`;
+
+exports[`PackageBase Parse shorts 1`] = `
+"{
+  \\"name\\": \\"package-json-helper\\",
+  \\"version\\": \\"0.9.0\\",
+  \\"description\\": \\"Helper for updating, comparing and fetching changes in package.json\\",
+  \\"license\\": \\"MIT\\",
+  \\"homepage\\": \\"https://github.com/keindev/package-json-helper#readme\\",
+  \\"author\\": \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\",
+  \\"keywords\\": [
+    \\"package\\",
+    \\"json\\",
+    \\"helper\\",
+    \\"util\\"
+  ],
+  \\"funding\\": {
+    \\"http://example.com/donate\\": {
+      \\"url\\": \\"http://example.com/donate\\",
+      \\"type\\": \\"individual\\"
+    },
+    \\"http://example.com/donateAlso\\": \\"http://example.com/donateAlso\\",
+    \\"https://www.patreon.com/my-account\\": {
+      \\"url\\": \\"https://www.patreon.com/my-account\\",
+      \\"type\\": \\"patreon\\"
+    }
+  },
+  \\"types\\": \\"lib/index.d.ts\\",
+  \\"type\\": \\"module\\",
+  \\"workspaces\\": [
+    \\"./packages/*\\"
+  ],
+  \\"main\\": \\"lib/index.js\\",
+  \\"bin\\": {
+    \\"my-program\\": \\"./path/to/program\\"
+  },
+  \\"man\\": [
+    \\"./man/foo.1\\",
+    \\"./man/bar.1\\"
+  ],
+  \\"repository\\": \\"github:user/repo\\",
+  \\"os\\": [
+    \\"darwin\\",
+    \\"linux\\"
+  ],
+  \\"cpu\\": [
+    \\"!arm\\",
+    \\"!mips\\"
+  ],
+  \\"engines\\": {
+    \\"npm\\": \\"~1.0.20\\"
+  },
+  \\"scripts\\": {
+    \\"build\\": \\"npm-run-all build:*\\",
+    \\"build:ts\\": \\"rimraf lib && tsc --extendedDiagnostics\\",
+    \\"generate\\": \\"npm-run-all generate:*\\",
+    \\"generate:changelog\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/changelog generate --bump\\",
+    \\"generate:ghinfo\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/ghinfo generate -d media -t utils\\",
+    \\"lint\\": \\"npm-run-all lint:*\\",
+    \\"lint:eslint\\": \\"rimraf coverage && eslint \\\\\\"src/**\\\\\\" --ext .ts\\",
+    \\"lint:spell\\": \\"cspell -c .vscode/cspell.json --no-summary \\\\\\"README.md\\\\\\" \\\\\\"src/**/*.ts\\\\\\"\\",
+    \\"prepare\\": \\"npm-run-all prepare:*\\",
+    \\"prepare:config\\": \\"node --experimental-specifier-resolution=node node_modules/.bin/ts-package-shared-config\\",
+    \\"prepare:husky\\": \\"husky install\\",
+    \\"release\\": \\"npm-run-all prepare lint test build generate\\",
+    \\"test\\": \\"npm-run-all test:*\\",
+    \\"test:jest\\": \\"node --experimental-vm-modules node_modules/.bin/jest\\"
+  },
+  \\"dependencies\\": {
+    \\"foo\\": \\"user/repo#feature/branch\\",
+    \\"bar\\": \\"file:../foo/bar\\"
+  },
+  \\"devDependencies\\": {
+    \\"@tagproject/ts-package-shared-config\\": \\"^4.0.0\\",
+    \\"@types/jest\\": \\"^27.0.1\\",
+    \\"@types/lodash.clonedeep\\": \\"^4.5.6\\",
+    \\"@types/node\\": \\"^16.7.0\\",
+    \\"@types/semver\\": \\"^7.3.8\\",
+    \\"@typescript-eslint/eslint-plugin\\": \\"^4.29.2\\",
+    \\"@typescript-eslint/parser\\": \\"^4.29.2\\",
+    \\"changelog-guru\\": \\"^3.0.2\\",
+    \\"cspell\\": \\"^5.7.2\\",
+    \\"eslint\\": \\"^7.32.0\\",
+    \\"eslint-config-prettier\\": \\"^8.3.0\\",
+    \\"eslint-plugin-import\\": \\"^2.24.1\\",
+    \\"eslint-plugin-jest\\": \\"^24.4.0\\",
+    \\"eslint-plugin-node\\": \\"^11.1.0\\",
+    \\"eslint-plugin-optimize-regex\\": \\"^1.2.1\\",
+    \\"eslint-plugin-promise\\": \\"^5.1.0\\",
+    \\"ghinfo\\": \\"^2.0.3\\",
+    \\"husky\\": \\"^7.0.1\\",
+    \\"jest\\": \\"^27.0.6\\",
+    \\"npm-run-all\\": \\"^4.1.5\\",
+    \\"prettier\\": \\"^2.3.2\\",
+    \\"rimraf\\": \\"^3.0.2\\",
+    \\"ts-jest\\": \\"^27.0.5\\",
+    \\"typescript\\": \\"^4.3.5\\"
+  },
+  \\"peerDependencies\\": {
+    \\"tea\\": \\"2.x\\",
+    \\"soy-milk\\": \\"1.2\\"
+  },
+  \\"peerDependenciesMeta\\": {
+    \\"soy-milk\\": {
+      \\"optional\\": true
+    }
+  },
+  \\"bundledDependencies\\": [
+    \\"super-streams\\"
+  ]
+}"
+`;

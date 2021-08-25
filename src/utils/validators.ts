@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { JSONObject, JSONValue } from '../types';
+import { JSONObject } from '../types';
 
 export type IValidator<T> = (value: T) => true | string;
 type IValidatorCallback<T, K> = (value: T, ...props: K[]) => boolean;
@@ -13,7 +13,7 @@ export const EMAIL_REGEXP = /^[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*
 export const check = <T>(value: T, validators: IValidator<T>[]): T => {
   let result;
 
-  if (validators.some(isValid => (result = isValid(value)) !== true)) {
+  if (validators.some(fn => (result = fn(value)) !== true)) {
     throw new Error(result);
   }
 
@@ -30,12 +30,8 @@ const validator = <T, K>(fn: IValidatorCallback<T, K>): IValidatorWrapper<T, K> 
   return wrapper;
 };
 
-const isString = (value: JSONValue): boolean => typeof value === 'string';
-
 export const validators = {
-  isStringArray: validator((value: JSONValue[]) => value.every(isString)),
   isSemanticVersion: validator((value: string) => semver.clean(value) !== null),
-  isKeyValueObject: validator((value: JSONObject) => !!value && Object.values(value).every(isString)),
   isMatchesRegExp: validator((value: string, expression: RegExp) => expression.test(value)),
   isEnum: validator((value: string, variations: string[]) => variations.includes(value)),
   hasValidLength: validator(
@@ -45,13 +41,3 @@ export const validators = {
     properties.every(name => Object.prototype.hasOwnProperty.call(value, name))
   ),
 };
-
-/*
-const validate = {
-
-  isValidType: validator((value: JSONValue) => Object.values(Type).every(type => type === value)),
-  hasProperties: validator((value: Maybe<JSONObject>, properties: string[]) =>
-    properties.every(name => Object.prototype.hasOwnProperty.call(value, name))
-  ),
-};
-*/

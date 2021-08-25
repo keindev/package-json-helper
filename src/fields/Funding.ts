@@ -1,24 +1,19 @@
+import { Link } from '../core/Link';
 import { JSONValue } from '../types';
-import { cast, parsers } from '../utils/parsers';
-import { validators } from '../utils/validators';
-import { URL } from './URL';
 
-export class Funding extends URL {
+export class Funding extends Link {
   /** The type of funding. */
-  type = '';
+  type?: string;
 
-  constructor(data: JSONValue) {
-    super();
+  constructor({ url, type }: { url: string; type?: string }) {
+    super(url);
 
-    if (typeof data !== 'undefined') {
-      const funding = parsers.getObject([validators.hasProperties('Url is required field of funding object', ['url'])])(
-        typeof data === 'string' ? { url: data } : data
-      ) as Partial<Funding> & { url: string };
+    this.type = type;
+  }
 
-      this.url = funding.url;
-      this.type = cast.toString(funding.type);
-    } else {
-      throw new Error('Funding must be string or object');
-    }
+  getSnapshot(): JSONValue {
+    const { url, type } = this;
+
+    return type ? { url, type } : url;
   }
 }

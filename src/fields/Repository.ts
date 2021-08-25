@@ -1,25 +1,20 @@
+import { Link } from '../core/Link';
 import { JSONValue } from '../types';
-import { cast, parsers } from '../utils/parsers';
-import { validators } from '../utils/validators';
-import { URL } from './URL';
 
-export class Repository extends URL {
-  type = '';
-  directory = '';
+export class Repository extends Link {
+  type?: string;
+  directory?: string;
 
-  constructor(data: JSONValue) {
-    super();
+  constructor({ url, type, directory }: { url: string; type?: string; directory?: string }) {
+    super(url);
 
-    if (typeof data !== 'undefined') {
-      const repository = parsers.getObject([
-        validators.hasProperties('Url is required field of repository object', ['url']),
-      ])(typeof data === 'string' ? { url: data } : data) as Partial<Repository> & { url: string };
+    this.type = type;
+    this.directory = directory;
+  }
 
-      this.url = repository.url;
-      this.type = cast.toString(repository.type);
-      this.directory = cast.toString(repository.directory);
-    } else {
-      throw new Error('Repository must be string or object');
-    }
+  getSnapshot(): JSONValue {
+    const { url, type, directory } = this;
+
+    return type || directory ? { type, url, directory } : url;
   }
 }

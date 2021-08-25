@@ -1,22 +1,27 @@
-import { JSONValue } from '../types';
-import { cast, parsers } from '../utils/parsers';
-import { validators } from '../utils/validators';
-import { Link } from './Link';
+import { Link } from '../core/Link';
+import { JSONValue, Maybe } from '../types';
+import { cast } from '../utils/parsers';
 
 export class BugsLocation extends Link {
-  constructor(data: JSONValue) {
-    super();
+  #email?: string;
 
-    if (typeof data !== 'undefined') {
-      const location = parsers.getObject([validators.hasProperties('Bugs location url is required field', ['url'])])(
-        typeof data === 'string' ? { url: data } : data
-      ) as Partial<Link> & { url: string };
+  constructor({ url, email }: { url: string; email?: string }) {
+    super(url);
 
-      this.url = location.url;
+    this.email = email;
+  }
 
-      if (location.email) this.email = cast.toString(location.email);
-    } else {
-      throw new Error('BugsLocation must be string or object');
-    }
+  get email(): Maybe<string> {
+    return this.#email;
+  }
+
+  set email(value: Maybe<string>) {
+    this.#email = typeof value === 'string' ? cast.toEmail(value) : value;
+  }
+
+  getSnapshot(): JSONValue {
+    const { url, email } = this;
+
+    return email ? { url, email } : url;
   }
 }

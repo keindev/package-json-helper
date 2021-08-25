@@ -1,28 +1,43 @@
-import { JSONValue } from '../types';
-import { cast, parsers } from '../utils/parsers';
-import { validators } from '../utils/validators';
-import { Link } from './Link';
+import Field from '../core/Field';
+import { JSONValue, Maybe } from '../types';
+import { cast } from '../utils/parsers';
 
-const PERSON_REGEXP =
-  /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;
+export class Person extends Field {
+  #email?: string;
+  #url?: string;
 
-export class Person extends Link {
-  name = '';
+  name: string;
 
-  constructor(data: JSONValue) {
+  constructor({ name, url, email }: { name: string; url?: string; email?: string }) {
     super();
 
-    if (typeof data !== 'undefined') {
-      const person = parsers.getObject([validators.hasProperties('Person name is required field', ['name'])])(
-        typeof data === 'string' ? data.match(PERSON_REGEXP)?.groups ?? {} : data
-      ) as Partial<Person & Link> & { name: string };
+    this.name = name;
+    this.url = url;
+    this.email = email;
+  }
 
-      this.name = person.name;
+  get email(): Maybe<string> {
+    return this.#email;
+  }
 
-      if (person.url) this.url = cast.toString(person.url);
-      if (person.email) this.email = cast.toString(person.email);
-    } else {
-      throw new Error('Person must be string or object');
-    }
+  set email(value: Maybe<string>) {
+    this.#email = typeof value === 'string' ? cast.toEmail(value) : value;
+  }
+
+  get url(): Maybe<string> {
+    return this.#url;
+  }
+
+  set url(value: Maybe<string>) {
+    this.#url = typeof value === 'string' ? cast.toUrl(value) : value;
+  }
+
+  getSnapshot(): JSONValue {
+    const { name, url, email } = this;
+
+    if (url && email) return `${name} <${email}> (${url})`;
+    if (url || email) return { name, url, email };
+
+    return name;
   }
 }

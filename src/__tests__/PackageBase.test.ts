@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import PackageBase from '../PackageBase';
+import PackageBase from '../core/PackageBase';
 
 const base = {
   ...JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf-8')),
@@ -9,11 +9,12 @@ const base = {
 
 describe('PackageBase', () => {
   it('Parse base', () => {
-    const pkg = new PackageBase({ ...base });
+    const pkg = new PackageBase({ ...base, bin: './index.js' });
 
     expect(pkg.name).toBe(base.name);
-    expect(pkg.author.name).toBe('Daniil Ryazanov');
-    expect(pkg.author.email).toBe('kein@tagproject.ru');
+    expect(pkg.author?.name).toBe('Daniil Ryazanov');
+    expect(pkg.author?.email).toBe('kein@tagproject.ru');
+    expect(pkg.toString()).toMatchSnapshot();
   });
 
   it('Parse shorts', () => {
@@ -39,21 +40,24 @@ describe('PackageBase', () => {
       workspaces: ['./packages/*'],
     });
 
-    expect(pkg.author.name).toBe('Barney Rubble');
-    expect(pkg.author.email).toBe('b@rubble.com');
-    expect(pkg.author.url).toBe('http://barnyrubble.tumblr.com/');
-    expect(pkg.bugs.url).toBe('https://github.com/owner/project/issues');
+    expect(pkg.author?.name).toBe('Barney Rubble');
+    expect(pkg.author?.email).toBe('b@rubble.com');
+    expect(pkg.author?.url).toBe('http://barnyrubble.tumblr.com/');
+    expect(pkg.bugs?.url).toBe('https://github.com/owner/project/issues');
     expect(pkg.funding.size).toBe(3);
     expect(pkg.funding.has('http://example.com/donate')).toBeTruthy();
     expect(pkg.bin.get('my-program')).toBe('./path/to/program');
-    expect(pkg.man.size).toBe(2);
-    expect(pkg.os.size).toBe(2);
-    expect(pkg.cpu.size).toBe(2);
-    expect(pkg.engines.size).toBe(1);
-    expect(pkg.dependencies.size).toBe(2);
-    expect(pkg.peerDependencies.size).toBe(2);
+    expect(pkg.man?.size).toBe(2);
+    expect(pkg.os?.size).toBe(2);
+    expect(pkg.cpu?.size).toBe(2);
+    expect(pkg.engines?.size).toBe(1);
+    expect(pkg.dependencies?.size).toBe(2);
+    expect(pkg.peerDependencies?.size).toBe(2);
     expect(pkg.peerDependenciesMeta.get('soy-milk')?.optional).toBeTruthy();
-    expect(pkg.bundledDependencies.size).toBe(1);
-    expect(pkg.workspaces.size).toBe(1);
+    expect(pkg.bundledDependencies?.size).toBe(1);
+    expect(pkg.workspaces?.size).toBe(1);
+    expect(pkg.toString()).toMatchSnapshot();
+
+    console.log(pkg.toString());
   });
 });
