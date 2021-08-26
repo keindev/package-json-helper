@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import PackageBase from './core/PackageBase';
-import { JSONObject, Maybe } from './types';
+import { JSONObject } from './types';
 
 export class Package extends PackageBase {
   constructor(value: string | JSONObject) {
@@ -11,10 +11,6 @@ export class Package extends PackageBase {
         ? (JSON.parse(fs.readFileSync(value ?? path.resolve(process.cwd(), 'package.json'), 'utf-8')) as JSONObject)
         : value
     );
-  }
-
-  get scope(): Maybe<string> {
-    return this.name.match(/^@(?<scope>[\w.-]+)\/(?<name>[\w.-]+)/i)?.groups?.scope;
   }
 
   write(filePath?: string): void {

@@ -112,11 +112,11 @@ export const cast = {
 
     return map;
   },
-  toBin: (data: JSONValue): Map<string, string> => {
+  toBin: (packageName: string, data: JSONValue): Map<string, string> => {
     const map = new Map();
 
     if (typeof data === 'string') {
-      map.set('', data);
+      map.set(packageName, data);
     } else {
       const paths = cast.toObject(data);
 

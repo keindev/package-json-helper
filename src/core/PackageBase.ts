@@ -72,7 +72,9 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   /** Client-side module ID that is the primary entry point. */
   browser?: string;
 
-  #name: string;
+  #name = '';
+  #nameWithoutScope = '';
+  #scope?: string;
   #version: string;
   #homepage?: string;
   #type: Type;
@@ -90,8 +92,6 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   cpu?: Set<string>;
   /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
   workspaces?: Set<string>;
-  /** The executable files that should be installed into the `PATH`. */
-  bin: Map<string, string>;
   /** Script commands that are run at various times in the lifecycle of the package. The key is the lifecycle event, and the value is the command to run at that point. */
   scripts?: Map<string, string>;
   /** Is used to set configuration parameters used in package scripts that persist across upgrades. */
@@ -114,6 +114,10 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   author?: Person;
   /** Location for the code repository. */
   repository?: Repository;
+  /** A set of config values that will be used at publish-time. It's especially handy to set the tag, registry or access, to ensure that a given package is not tagged with 'latest', published to the global public registry or that a scoped module is private by default. */
+  publishConfig: Map<string, string | number | boolean>;
+  /** The executable files that should be installed into the `PATH`. */
+  bin: Map<string, string>;
   /** A list of people who contributed to the package. */
   contributors: Map<string, Person>;
   /** A list of people who maintain the package. */
@@ -122,22 +126,20 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   funding: Map<string, Funding>;
   /** Indicate peer dependencies that are optional. */
   peerDependenciesMeta: Map<string, DependencyMeta>;
-  /** A set of config values that will be used at publish-time. It's especially handy to set the tag, registry or access, to ensure that a given package is not tagged with 'latest', published to the global public registry or that a scoped module is private by default. */
-  publishConfig: Map<string, string | number | boolean>;
 
   protected data: JSONObject;
 
   constructor(data: JSONObject) {
     this.data = cloneDeep(data);
     this.private = !!data.private;
-    this.#name = parsers.getString(rules.name)(data.name) || '';
+    this.name = parsers.getString(rules.name)(data.name) || '';
     this.#version = parsers.getString(rules.version)(data.version) || '';
     this.#homepage = parsers.getString(rules.homepage)(data.homepage);
     this.#type = data.type ? (parsers.getString(rules.type)(data.type) as Type) : Type.Commonjs;
     this.bugs = cast.toBugsLocation(data.bugs);
     this.author = cast.toPerson(data.author);
     this.repository = cast.toRepository(data.repository);
-    this.bin = cast.toBin(data.bin);
+    this.bin = cast.toBin(this.nameWithoutScope, data.bin);
     this.contributors = cast.toPersons(data.contributors);
     this.maintainers = cast.toPersons(data.maintainers);
     this.funding = cast.toFundingList(data.funding);
@@ -156,6 +158,19 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
 
   set name(value: string) {
     this.#name = check(value, rules.name);
+
+    const { scope, name } = this.#name.match(/^@(?<scope>[\w.-]+)\/(?<name>[\w.-]+)/i)?.groups ?? {};
+
+    this.#scope = scope;
+    this.#nameWithoutScope = name ?? this.name;
+  }
+
+  get scope(): Maybe<string> {
+    return this.#scope;
+  }
+
+  get nameWithoutScope(): string {
+    return this.#nameWithoutScope;
   }
 
   /** Package version, parseable by [`node-semver`](https://github.com/npm/node-semver). */
