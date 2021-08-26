@@ -18,11 +18,6 @@ Source code now under `MIT` license.
 # :memo: Internal changes
 
 - Add `PackageBase` test [`db30dae`](https://github.com/keindev/package-json-helper/commit/db30daed8640e3a16443e27dddf2679d3ba9df4d)
-- Rebuild configs, bump deps [`57a20f7`](https://github.com/keindev/package-json-helper/commit/57a20f7d3067bbadf4beb99b78abf942dcfe0df8)
-
-# :wrench: Code Refactoring
-
-- Refactor parsing utils [`e61b84e`](https://github.com/keindev/package-json-helper/commit/e61b84e1d589963f521301f145b9669b8b6f061b)
 
 ---
 
