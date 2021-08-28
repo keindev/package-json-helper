@@ -6,8 +6,8 @@ import { Funding } from '../fields/Funding';
 import { Person } from '../fields/Person';
 import { Repository } from '../fields/Repository';
 import { JSONObject, Maybe } from '../types';
+import { replacer } from '../utils/package';
 import { cast, parsers } from '../utils/parsers';
-import { replacer } from '../utils/replacer';
 import { check, URL_REGEXP, validators } from '../utils/validators';
 
 const NAME_MAX_LENGTH = 214;
@@ -79,35 +79,35 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   #homepage?: string;
   #type: Type;
   /** Keywords associated with package, listed in `npm search`. */
-  keywords?: Set<string>;
+  readonly keywords = new Set<string>();
   /** The files included in the package. */
-  files?: Set<string>;
+  readonly files = new Set<string>();
   /** Filenames to put in place for the `man` program to find. */
-  man?: Set<string>;
+  readonly man = new Set<string>();
   /** Package names that are bundled when the package is published. */
-  bundledDependencies?: Set<string>;
+  readonly bundledDependencies = new Set<string>();
   /** Operating systems the module runs on. */
-  os?: Set<string>;
+  readonly os = new Set<string>();
   /** CPU architectures the module runs on. */
-  cpu?: Set<string>;
+  readonly cpu = new Set<string>();
   /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
-  workspaces?: Set<string>;
+  readonly workspaces = new Set<string>();
   /** Script commands that are run at various times in the lifecycle of the package. The key is the lifecycle event, and the value is the command to run at that point. */
-  scripts?: Map<string, string>;
+  readonly scripts = new Map<string, string>();
   /** Is used to set configuration parameters used in package scripts that persist across upgrades. */
-  config?: Map<string, string>;
+  readonly config = new Map<string, string>();
   /** The dependencies of the package. */
-  dependencies?: Map<string, string>;
+  readonly dependencies = new Map<string, string>();
   /** Additional tooling dependencies that are not required for the package to work. Usually test, build, or documentation tooling. */
-  devDependencies?: Map<string, string>;
+  readonly devDependencies = new Map<string, string>();
   /** Dependencies that are skipped if they fail to install. */
-  optionalDependencies?: Map<string, string>;
+  readonly optionalDependencies = new Map<string, string>();
   /** Dependencies that will usually be required by the package user directly or via another dependency. */
-  peerDependencies?: Map<string, string>;
+  readonly peerDependencies = new Map<string, string>();
   /** Engines that this package runs on. */
-  engines?: Map<string, string>;
+  readonly engines = new Map<string, string>();
   /** Indicates the structure of the package. */
-  directories?: Map<string, string>;
+  readonly directories = new Map<string, string>();
   /** The URL to the package's issue tracker and/or the email address to which issues should be reported. */
   bugs?: BugsLocation;
   /** Author of the package */
@@ -115,17 +115,17 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   /** Location for the code repository. */
   repository?: Repository;
   /** A set of config values that will be used at publish-time. It's especially handy to set the tag, registry or access, to ensure that a given package is not tagged with 'latest', published to the global public registry or that a scoped module is private by default. */
-  publishConfig: Map<string, string | number | boolean>;
+  readonly publishConfig: Map<string, string | number | boolean>;
   /** The executable files that should be installed into the `PATH`. */
-  bin: Map<string, string>;
+  readonly bin: Map<string, string>;
   /** A list of people who contributed to the package. */
-  contributors: Map<string, Person>;
+  readonly contributors: Map<string, Person>;
   /** A list of people who maintain the package. */
-  maintainers: Map<string, Person>;
+  readonly maintainers: Map<string, Person>;
   /** Describes and notifies consumers of a package's monetary support information. */
-  funding: Map<string, Funding>;
+  readonly funding: Map<string, Funding>;
   /** Indicate peer dependencies that are optional. */
-  peerDependenciesMeta: Map<string, DependencyMeta>;
+  readonly peerDependenciesMeta: Map<string, DependencyMeta>;
 
   protected data: JSONObject;
 
@@ -147,8 +147,8 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
     this.publishConfig = cast.toPublishConfig(data.publishConfig);
 
     Object.values(StringProps).forEach(name => (this[name] = cast.toString(data[name])));
-    Object.values(StringListProps).forEach(name => (this[name] = cast.toSet(data[name])));
-    Object.values(StringMapProps).forEach(name => (this[name] = cast.toMap(data[name])));
+    Object.values(StringListProps).forEach(name => cast.toSet(data[name], this[name]));
+    Object.values(StringMapProps).forEach(name => cast.toMap(data[name], this[name]));
   }
 
   /** Name of the package */

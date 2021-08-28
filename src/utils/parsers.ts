@@ -40,41 +40,27 @@ export const cast = {
   toArray: parsers.getArray(),
   toUrl: parsers.getString([validators.isMatchesRegExp("Url can't contain any non-URL-safe characters", URL_REGEXP)]),
   toEmail: parsers.getString([validators.isMatchesRegExp('Email address is not valid', EMAIL_REGEXP)]),
-  toSet: (data: JSONValue): Maybe<Set<string>> => {
+  toSet: (data: JSONValue, list: Set<string>): void => {
     const values = cast.toArray(data);
-    let list;
-
-    if (values?.length) {
-      list = new Set<string>(
-        values.reduce<string[]>((acc, rawValue) => {
-          const value = cast.toString(rawValue);
-
-          if (value) acc.push(value);
-
-          return acc;
-        }, [])
-      );
-    }
-
-    return list;
-  },
-  toMap: (data: JSONValue): Maybe<Map<string, string>> => {
-    const values = cast.toObject(data);
-    let map;
 
     if (values) {
-      map = new Map<string, string>(
-        Object.entries(values).reduce<[string, string][]>((acc, [key, rawValue]) => {
-          const value = cast.toString(rawValue);
+      values.forEach(rawValue => {
+        const value = cast.toString(rawValue);
 
-          if (value) acc.push([key, value]);
-
-          return acc;
-        }, [])
-      );
+        if (value) list.add(value);
+      });
     }
+  },
+  toMap: (data: JSONValue, map: Map<string, string>): void => {
+    const obj = cast.toObject(data);
 
-    return map;
+    if (obj) {
+      Object.entries(obj).forEach(([key, rawValue]) => {
+        const value = cast.toString(rawValue);
+
+        if (value) map.set(key, value);
+      });
+    }
   },
   toLink: (data: JSONValue): JSONObject & { url?: string } => {
     const { url, ...others } =
