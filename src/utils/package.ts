@@ -13,12 +13,12 @@ export interface IDependencyCompareResult {
 
 export const replacer = (key: string, value: JSONValue): JSONValue => {
   if (value === null || ((typeof value === 'string' || Array.isArray(value)) && !value.length)) return undefined;
-  if (value instanceof Set) return value.size ? [...value.values()] : undefined;
+  if (value instanceof Set) return value.size ? [...value.values()].sort() : undefined;
   if (value instanceof Map) {
     if (!value.size) return undefined;
     if (OBJECT_FIELDS_NAMES.some(field => field === key)) return [...value.values()];
 
-    return Object.fromEntries(value);
+    return Object.fromEntries([...value.entries()].sort(([a], [b]) => a.localeCompare(b)));
   }
   if (typeof value === 'object') {
     if (Object.keys(value).length === 0) return undefined;
