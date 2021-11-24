@@ -2,14 +2,14 @@ import { Link } from '../core/Link';
 import { JSONValue } from '../types';
 
 export class Repository extends Link {
-  type?: string;
   directory?: string;
+  type?: string;
 
-  constructor({ url, type, directory }: { url: string; type?: string; directory?: string }) {
+  constructor({ directory, type, url }: { directory?: string; type?: string; url: string }) {
     super(url);
 
-    this.type = type;
     this.directory = directory;
+    this.type = type;
   }
 
   getSnapshot(): JSONValue {

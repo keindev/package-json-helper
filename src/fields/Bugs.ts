@@ -5,7 +5,7 @@ import { cast } from '../utils/parsers';
 export class BugsLocation extends Link {
   #email?: string;
 
-  constructor({ url, email }: { url: string; email?: string }) {
+  constructor({ email, url }: { email?: string; url: string }) {
     super(url);
 
     this.email = email;

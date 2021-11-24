@@ -5,7 +5,7 @@ export class Funding extends Link {
   /** The type of funding. */
   type?: string;
 
-  constructor({ url, type }: { url: string; type?: string }) {
+  constructor({ type, url }: { type?: string; url: string }) {
     super(url);
 
     this.type = type;
