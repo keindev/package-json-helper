@@ -82,8 +82,6 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   readonly contributors: Map<string, Person>;
   /** CPU architectures the module runs on. */
   readonly cpu = new Set<string>();
-  // raw package object
-  protected data: JSONObject;
   /** The dependencies of the package. */
   readonly dependencies = new Map<string, string>();
   /** Package description, listed in `npm search`. */
@@ -128,6 +126,9 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   types?: string;
   /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
   readonly workspaces = new Set<string>();
+
+  // raw package object
+  protected data: JSONObject;
 
   constructor(data: JSONObject) {
     this.data = cloneDeep(data);
