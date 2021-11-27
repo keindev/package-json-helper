@@ -9,8 +9,12 @@ const DEFAULT_FILE_PATH = path.resolve(process.cwd(), 'package.json');
 export class Package extends PackageBase {
   #filePath?: string;
 
-  constructor(value: string | JSONObject = DEFAULT_FILE_PATH) {
-    super(typeof value === 'object' ? value : (JSON.parse(fs.readFileSync(value, 'utf-8')) as JSONObject));
+  constructor(value?: string | JSONObject) {
+    super(
+      typeof value === 'object'
+        ? value
+        : (JSON.parse(fs.readFileSync(value ?? DEFAULT_FILE_PATH, 'utf-8')) as JSONObject)
+    );
 
     if (typeof value === 'string') this.#filePath = value;
   }
