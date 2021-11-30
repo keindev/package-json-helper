@@ -16,8 +16,8 @@ exports[`Package Parse alternative 1`] = `
     \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
   ],
   \\"keywords\\": [
-    \\"test\\",
-    \\"jest\\"
+    \\"jest\\",
+    \\"test\\"
   ],
   \\"funding\\": [
     {
@@ -40,9 +40,9 @@ exports[`Package Parse alternative 1`] = `
     \\"./packages/*\\"
   ],
   \\"directories\\": {
-    \\"lib\\": \\"src/lib\\",
     \\"bin\\": \\"local/binaries\\",
-    \\"jars\\": \\"java\\"
+    \\"jars\\": \\"java\\",
+    \\"lib\\": \\"src/lib\\"
   },
   \\"main\\": \\"lib/index.js\\",
   \\"bin\\": {
@@ -50,8 +50,8 @@ exports[`Package Parse alternative 1`] = `
     \\"shortname\\": \\"./path/to/program/index.js\\"
   },
   \\"man\\": [
-    \\"./man/foo.1\\",
-    \\"./man/bar.1\\"
+    \\"./man/bar.1\\",
+    \\"./man/foo.1\\"
   ],
   \\"repository\\": \\"gitlab:user/repo\\",
   \\"config\\": {
@@ -61,42 +61,42 @@ exports[`Package Parse alternative 1`] = `
     \\"allow-same-version\\": true
   },
   \\"os\\": [
+    \\"!win32\\",
     \\"darwin\\",
-    \\"linux\\",
-    \\"!win32\\"
+    \\"linux\\"
   ],
   \\"cpu\\": [
-    \\"x64\\",
+    \\"!arm\\",
     \\"ia32\\",
-    \\"!arm\\"
+    \\"x64\\"
   ],
   \\"engines\\": {
     \\"node\\": \\">=0.10.3 <15\\"
   },
   \\"scripts\\": {
-    \\"prepare\\": \\"command -o lib/ -c src/index.js\\",
-    \\"compress\\": \\"{{ run command to compress files }}\\"
+    \\"compress\\": \\"{{ run command to compress files }}\\",
+    \\"prepare\\": \\"command -o lib/ -c src/index.js\\"
   },
   \\"dependencies\\": {
-    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
+    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
     \\"bar\\": \\">=1.0.2 <2.1.2\\",
     \\"baz\\": \\">1.0.2 <=2.3.4\\",
     \\"boo\\": \\"2.0.1\\",
-    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
-    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
-    \\"til\\": \\"~1.2\\",
+    \\"dyl\\": \\"file:../dyl\\",
     \\"elf\\": \\"~1.2.3\\",
-    \\"two\\": \\"2.x\\",
-    \\"thr\\": \\"3.3.x\\",
+    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
     \\"lat\\": \\"latest\\",
-    \\"dyl\\": \\"file:../dyl\\"
+    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
+    \\"thr\\": \\"3.3.x\\",
+    \\"til\\": \\"~1.2\\",
+    \\"two\\": \\"2.x\\"
   },
   \\"devDependencies\\": {
     \\"super-script\\": \\"~1.6.3\\"
   },
   \\"peerDependencies\\": {
-    \\"tea\\": \\"2.x\\",
-    \\"soy-milk\\": \\"1.2\\"
+    \\"soy-milk\\": \\"1.2\\",
+    \\"tea\\": \\"2.x\\"
   },
   \\"peerDependenciesMeta\\": {
     \\"soy-milk\\": {
@@ -128,8 +128,8 @@ exports[`Package Parse base 1`] = `
     \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
   ],
   \\"keywords\\": [
-    \\"test\\",
-    \\"jest\\"
+    \\"jest\\",
+    \\"test\\"
   ],
   \\"types\\": \\"lib/index.d.ts\\",
   \\"type\\": \\"module\\",
@@ -140,9 +140,9 @@ exports[`Package Parse base 1`] = `
     \\"./packages/*\\"
   ],
   \\"directories\\": {
-    \\"lib\\": \\"src/lib\\",
     \\"bin\\": \\"local/binaries\\",
-    \\"jars\\": \\"java\\"
+    \\"jars\\": \\"java\\",
+    \\"lib\\": \\"src/lib\\"
   },
   \\"main\\": \\"lib/index.js\\",
   \\"bin\\": {
@@ -160,42 +160,42 @@ exports[`Package Parse base 1`] = `
     \\"allow-same-version\\": true
   },
   \\"os\\": [
+    \\"!win32\\",
     \\"darwin\\",
-    \\"linux\\",
-    \\"!win32\\"
+    \\"linux\\"
   ],
   \\"cpu\\": [
-    \\"x64\\",
+    \\"!arm\\",
     \\"ia32\\",
-    \\"!arm\\"
+    \\"x64\\"
   ],
   \\"engines\\": {
     \\"node\\": \\">=0.10.3 <15\\"
   },
   \\"scripts\\": {
-    \\"prepare\\": \\"command -o lib/ -c src/index.js\\",
-    \\"compress\\": \\"{{ run command to compress files }}\\"
+    \\"compress\\": \\"{{ run command to compress files }}\\",
+    \\"prepare\\": \\"command -o lib/ -c src/index.js\\"
   },
   \\"dependencies\\": {
-    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
+    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
     \\"bar\\": \\">=1.0.2 <2.1.2\\",
     \\"baz\\": \\">1.0.2 <=2.3.4\\",
     \\"boo\\": \\"2.0.1\\",
-    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
-    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
-    \\"til\\": \\"~1.2\\",
+    \\"dyl\\": \\"file:../dyl\\",
     \\"elf\\": \\"~1.2.3\\",
-    \\"two\\": \\"2.x\\",
-    \\"thr\\": \\"3.3.x\\",
+    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
     \\"lat\\": \\"latest\\",
-    \\"dyl\\": \\"file:../dyl\\"
+    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
+    \\"thr\\": \\"3.3.x\\",
+    \\"til\\": \\"~1.2\\",
+    \\"two\\": \\"2.x\\"
   },
   \\"devDependencies\\": {
     \\"super-script\\": \\"~1.6.3\\"
   },
   \\"peerDependencies\\": {
-    \\"tea\\": \\"2.x\\",
-    \\"soy-milk\\": \\"1.2\\"
+    \\"soy-milk\\": \\"1.2\\",
+    \\"tea\\": \\"2.x\\"
   },
   \\"peerDependenciesMeta\\": {
     \\"soy-milk\\": {

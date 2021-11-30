@@ -1,4 +1,5 @@
 import { BugsLocation } from '../fields/Bugs';
+import { Dependency } from '../fields/Dependency';
 import { DependencyMeta } from '../fields/DependencyMeta';
 import { Funding } from '../fields/Funding';
 import { Person } from '../fields/Person';
@@ -40,41 +41,37 @@ export const cast = {
   toArray: parsers.getArray(),
   toUrl: parsers.getString([validators.isMatchesRegExp("Url can't contain any non-URL-safe characters", URL_REGEXP)]),
   toEmail: parsers.getString([validators.isMatchesRegExp('Email address is not valid', EMAIL_REGEXP)]),
-  toSet: (data: JSONValue): Maybe<Set<string>> => {
-    const values = cast.toArray(data);
-    let list;
+  toMap: <T>(data: JSONValue, map: Map<string, T>, callback: (key: string, rawValue: JSONValue) => T): void => {
+    const obj = cast.toObject(data);
 
-    if (values?.length) {
-      list = new Set<string>(
-        values.reduce<string[]>((acc, rawValue) => {
-          const value = cast.toString(rawValue);
+    if (obj) {
+      Object.entries(obj).forEach(([key, rawValue]) => {
+        const value = callback(key, rawValue);
 
-          if (value) acc.push(value);
-
-          return acc;
-        }, [])
-      );
+        if (value) map.set(key, value);
+      });
     }
-
-    return list;
   },
-  toMap: (data: JSONValue): Maybe<Map<string, string>> => {
-    const values = cast.toObject(data);
-    let map;
+  toSet: (data: JSONValue, list: Set<string>): void => {
+    const values = cast.toArray(data);
 
     if (values) {
-      map = new Map<string, string>(
-        Object.entries(values).reduce<[string, string][]>((acc, [key, rawValue]) => {
-          const value = cast.toString(rawValue);
+      values.forEach(rawValue => {
+        const value = cast.toString(rawValue);
 
-          if (value) acc.push([key, value]);
-
-          return acc;
-        }, [])
-      );
+        if (value) list.add(value);
+      });
     }
+  },
+  toStringMap: (data: JSONValue, map: Map<string, string>): void => {
+    cast.toMap(data, map, (_, rawValue) => cast.toString(rawValue));
+  },
+  toDependencyMap: (data: JSONValue, map: Map<string, Dependency>): void => {
+    cast.toMap(data, map, (key, rawValue) => {
+      const value = cast.toString(rawValue);
 
-    return map;
+      return value ? new Dependency(key, value) : undefined;
+    });
   },
   toLink: (data: JSONValue): JSONObject & { url?: string } => {
     const { url, ...others } =

@@ -1,20 +1,65 @@
+import { execa } from 'execa';
 import fs from 'fs';
 import path from 'path';
 
 import PackageBase from './core/PackageBase';
-import { JSONObject } from './types';
+import { DependenciesMapProps, JSONObject, PackageInstallCommandMap, PackageManager } from './types';
+
+const DEFAULT_FILE_PATH = path.resolve(process.cwd(), 'package.json');
 
 export class Package extends PackageBase {
-  constructor(value: string | JSONObject) {
+  #filePath = DEFAULT_FILE_PATH;
+  #manager = PackageManager.NPM;
+
+  constructor(value?: string | JSONObject, manager?: PackageManager) {
     super(
-      typeof value === 'string' || typeof value === 'undefined'
-        ? (JSON.parse(fs.readFileSync(value ?? path.resolve(process.cwd(), 'package.json'), 'utf-8')) as JSONObject)
-        : value
+      typeof value === 'object'
+        ? value
+        : (JSON.parse(fs.readFileSync(value ?? DEFAULT_FILE_PATH, 'utf-8')) as JSONObject)
+    );
+
+    if (typeof value === 'string') this.#filePath = value;
+    if (manager) this.#manager = manager;
+  }
+
+  get json(): JSONObject {
+    return JSON.parse(this.toString());
+  }
+
+  getMissingDependencies(prop: DependenciesMapProps, list: string[]): string[] {
+    return list.filter(item => !this[prop].has(item));
+  }
+
+  getWrongVersionDependencies(prop: DependenciesMapProps, map: Map<string, string>): string[] {
+    let dependency;
+
+    return [...map.entries()].reduce((acc, [name, version]) => {
+      if ((dependency = this[prop].get(name)) && !dependency.isSatisfy(version)) {
+        acc.push(name);
+      }
+
+      return acc;
+    }, [] as string[]);
+  }
+
+  async install(dependencies: Map<string, string | undefined>, flags?: string[]): Promise<void> {
+    await execa(
+      this.#manager,
+      [
+        PackageInstallCommandMap[this.#manager],
+        ...[...dependencies.entries()].map(([name, version]) => (version ? `${name}@"${version}"` : name)),
+        ...(flags ?? []),
+      ],
+      {
+        stdout: process.stdout,
+        stderr: process.stderr,
+        cwd: process.cwd(),
+      }
     );
   }
 
-  write(filePath?: string): void {
-    fs.writeFileSync(filePath || path.resolve(process.cwd(), 'package.json'), this.toString());
+  save(filePath?: string): void {
+    fs.writeFileSync(filePath ?? this.#filePath, this.toString());
   }
 }
 

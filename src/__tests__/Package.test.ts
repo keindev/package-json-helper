@@ -1,4 +1,5 @@
 import Package from '../Package';
+import { DependenciesMapProps } from '../types';
 
 const base = {
   name: 'test',
@@ -130,16 +131,36 @@ const alternative = {
 };
 
 describe('Package', () => {
-  it('Parse base', () => {
-    const pkg = new Package(base);
+  const pkgBase = new Package(base);
+  const pkgAlternative = new Package(alternative);
 
-    expect(pkg.toString()).toMatchSnapshot();
+  it('Parse base', () => {
+    expect(pkgBase.toString()).toMatchSnapshot();
   });
 
   it('Parse alternative', () => {
-    const pkg = new Package(alternative);
+    expect(pkgAlternative.scope).toBe('scope');
+    expect(pkgAlternative.toString()).toMatchSnapshot();
+  });
 
-    expect(pkg.scope).toBe('scope');
-    expect(pkg.toString()).toMatchSnapshot();
+  it('Check missing dependencies', () => {
+    expect(
+      pkgBase.getMissingDependencies(DependenciesMapProps.Dependencies, ['foo', 'bar', 'zip', 'zap'])
+    ).toMatchObject(['zip', 'zap']);
+  });
+
+  it('Check wrong version dependencies', () => {
+    expect(
+      pkgBase.getWrongVersionDependencies(
+        DependenciesMapProps.Dependencies,
+        new Map([
+          ['foo', '>2.9999.9999'],
+          ['bar', '4.x'],
+          ['boo', '>1.0.2'],
+          ['none', '1.x'],
+          ['thr', '^3.3.8 <3.4.x'],
+        ])
+      )
+    ).toMatchObject(['foo', 'bar', 'boo']);
   });
 });

@@ -1,24 +1,7 @@
-import { Link } from '../core/Link';
-import { JSONValue, Maybe } from '../types';
-import { cast } from '../utils/parsers';
+import { JSONValue } from '../types';
+import { Info } from './Info';
 
-export class BugsLocation extends Link {
-  #email?: string;
-
-  constructor({ url, email }: { url: string; email?: string }) {
-    super(url);
-
-    this.email = email;
-  }
-
-  get email(): Maybe<string> {
-    return this.#email;
-  }
-
-  set email(value: Maybe<string>) {
-    this.#email = typeof value === 'string' ? cast.toEmail(value) : value;
-  }
-
+export class BugsLocation extends Info {
   getSnapshot(): JSONValue {
     const { url, email } = this;
 
