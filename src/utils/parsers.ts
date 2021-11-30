@@ -1,4 +1,5 @@
 import { BugsLocation } from '../fields/Bugs';
+import { Dependency } from '../fields/Dependency';
 import { DependencyMeta } from '../fields/DependencyMeta';
 import { Funding } from '../fields/Funding';
 import { Person } from '../fields/Person';
@@ -40,6 +41,17 @@ export const cast = {
   toArray: parsers.getArray(),
   toUrl: parsers.getString([validators.isMatchesRegExp("Url can't contain any non-URL-safe characters", URL_REGEXP)]),
   toEmail: parsers.getString([validators.isMatchesRegExp('Email address is not valid', EMAIL_REGEXP)]),
+  toMap: <T>(data: JSONValue, map: Map<string, T>, callback: (key: string, rawValue: JSONValue) => T): void => {
+    const obj = cast.toObject(data);
+
+    if (obj) {
+      Object.entries(obj).forEach(([key, rawValue]) => {
+        const value = callback(key, rawValue);
+
+        if (value) map.set(key, value);
+      });
+    }
+  },
   toSet: (data: JSONValue, list: Set<string>): void => {
     const values = cast.toArray(data);
 
@@ -51,16 +63,15 @@ export const cast = {
       });
     }
   },
-  toMap: (data: JSONValue, map: Map<string, string>): void => {
-    const obj = cast.toObject(data);
+  toStringMap: (data: JSONValue, map: Map<string, string>): void => {
+    cast.toMap(data, map, (_, rawValue) => cast.toString(rawValue));
+  },
+  toDependencyMap: (data: JSONValue, map: Map<string, Dependency>): void => {
+    cast.toMap(data, map, (key, rawValue) => {
+      const value = cast.toString(rawValue);
 
-    if (obj) {
-      Object.entries(obj).forEach(([key, rawValue]) => {
-        const value = cast.toString(rawValue);
-
-        if (value) map.set(key, value);
-      });
-    }
+      return value ? new Dependency(key, value) : undefined;
+    });
   },
   toLink: (data: JSONValue): JSONObject & { url?: string } => {
     const { url, ...others } =

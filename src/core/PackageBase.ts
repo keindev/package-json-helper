@@ -1,71 +1,20 @@
-import cloneDeep from 'lodash.clonedeep';
-
 import { BugsLocation } from '../fields/Bugs';
+import { Dependency } from '../fields/Dependency';
 import { DependencyMeta } from '../fields/DependencyMeta';
+import Field from '../fields/Field';
 import { Funding } from '../fields/Funding';
 import { Person } from '../fields/Person';
 import { Repository } from '../fields/Repository';
-import { JSONObject, JSONValue, Maybe } from '../types';
-import { cast, parsers } from '../utils/parsers';
-import { check, URL_REGEXP, validators } from '../utils/validators';
-import Field from './Field';
+import {
+    DependenciesMapPropsMap, IPackageProps, JSONObject, JSONValue, StringListPropsMap, StringMapPropsMap,
+    StringPropsMap,
+} from '../types';
+import { cast } from '../utils/parsers';
+import AbstractPackage from './AbstractPackage';
 
-const NAME_MAX_LENGTH = 214;
 const TAB_WIDTH = 2;
 
-export enum Type {
-  Module = 'module',
-  Commonjs = 'commonjs',
-}
-
-enum StringProps {
-  Browser = 'browser',
-  Description = 'description',
-  License = 'license',
-  Main = 'main',
-  Types = 'types',
-}
-
-enum StringListProps {
-  BundledDependencies = 'bundledDependencies',
-  CPU = 'cpu',
-  Files = 'files',
-  Keywords = 'keywords',
-  Man = 'man',
-  OS = 'os',
-  Workspaces = 'workspaces',
-}
-
-enum StringMapProps {
-  Scripts = 'scripts',
-  Config = 'config',
-  Dependencies = 'dependencies',
-  DevDependencies = 'devDependencies',
-  OptionalDependencies = 'optionalDependencies',
-  PeerDependencies = 'peerDependencies',
-  Engines = 'engines',
-  Directories = 'directories',
-}
-
-type IStringProps = { [key in StringProps]?: string };
-type IStringListProps = { [key in StringListProps]?: Set<string> };
-type IStringMapProps = { [key in StringMapProps]?: Map<string, string> };
-
-const rules = {
-  name: [validators.hasValidLength('Name must be less than or equal to 214 characters', NAME_MAX_LENGTH)],
-  version: [validators.isSemanticVersion('Version must be parseable by node-semver')],
-  type: [validators.isEnum('Invalid package type', Object.values(Type))],
-  homepage: [validators.isMatchesRegExp("Homepage can't contain any non-URL-safe characters", URL_REGEXP)],
-};
-
-class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
-  #homepage?: string;
-  #name = '';
-  #nameWithoutScope = '';
-  #scope?: string;
-  #type: Type;
-  #version: string;
-
+class PackageBase extends AbstractPackage implements IPackageProps {
   /** Author of the package */
   author?: Person;
   /** The executable files that should be installed into the `PATH`. */
@@ -83,11 +32,11 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   /** CPU architectures the module runs on. */
   readonly cpu = new Set<string>();
   /** The dependencies of the package. */
-  readonly dependencies = new Map<string, string>();
+  readonly dependencies = new Map<string, Dependency>();
   /** Package description, listed in `npm search`. */
   description?: string;
   /** Additional tooling dependencies that are not required for the package to work. Usually test, build, or documentation tooling. */
-  readonly devDependencies = new Map<string, string>();
+  readonly devDependencies = new Map<string, Dependency>();
   /** Indicates the structure of the package. */
   readonly directories = new Map<string, string>();
   /** Engines that this package runs on. */
@@ -107,11 +56,11 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   /** Filenames to put in place for the `man` program to find. */
   readonly man = new Set<string>();
   /** Dependencies that are skipped if they fail to install. */
-  readonly optionalDependencies = new Map<string, string>();
+  readonly optionalDependencies = new Map<string, Dependency>();
   /** Operating systems the module runs on. */
   readonly os = new Set<string>();
   /** Dependencies that will usually be required by the package user directly or via another dependency. */
-  readonly peerDependencies = new Map<string, string>();
+  readonly peerDependencies = new Map<string, Dependency>();
   /** Indicate peer dependencies that are optional. */
   readonly peerDependenciesMeta: Map<string, DependencyMeta>;
   /** If set to `true`, then npm will refuse to publish it. */
@@ -127,16 +76,10 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
   /** Array of file patterns that describes locations within the local file system that the install client should look up to find each workspace that needs to be symlinked to the top level node_modules folder */
   readonly workspaces = new Set<string>();
 
-  // raw package object
-  protected data: JSONObject;
-
   constructor(data: JSONObject) {
-    this.data = cloneDeep(data);
+    super(data);
+
     this.private = !!data.private;
-    this.name = parsers.getString(rules.name)(data.name) || '';
-    this.#version = parsers.getString(rules.version)(data.version) || '';
-    this.#homepage = parsers.getString(rules.homepage)(data.homepage);
-    this.#type = data.type ? (parsers.getString(rules.type)(data.type) as Type) : Type.Commonjs;
     this.bugs = cast.toBugsLocation(data.bugs);
     this.author = cast.toPerson(data.author);
     this.repository = cast.toRepository(data.repository);
@@ -147,58 +90,10 @@ class PackageBase implements IStringProps, IStringListProps, IStringMapProps {
     this.peerDependenciesMeta = cast.toDependencyMeta(data.peerDependenciesMeta);
     this.publishConfig = cast.toPublishConfig(data.publishConfig);
 
-    Object.values(StringProps).forEach(name => (this[name] = cast.toString(data[name])));
-    Object.values(StringListProps).forEach(name => cast.toSet(data[name], this[name]));
-    Object.values(StringMapProps).forEach(name => cast.toMap(data[name], this[name]));
-  }
-
-  /** Name of the package */
-  get name(): string {
-    return this.#name;
-  }
-
-  set name(value: string) {
-    this.#name = check(value, rules.name);
-
-    const { scope, name } = this.#name.match(/^@(?<scope>[\w.-]+)\/(?<name>[\w.-]+)/i)?.groups ?? {};
-
-    this.#scope = scope;
-    this.#nameWithoutScope = name ?? this.name;
-  }
-
-  get scope(): Maybe<string> {
-    return this.#scope;
-  }
-
-  get nameWithoutScope(): string {
-    return this.#nameWithoutScope;
-  }
-
-  /** Package version, parseable by [`node-semver`](https://github.com/npm/node-semver). */
-  get version(): string {
-    return this.#version;
-  }
-
-  set version(value: string) {
-    this.#version = check(value, rules.version);
-  }
-
-  /** Resolution algorithm for importing ".js" files from the package's scope. */
-  get type(): Type {
-    return this.#type;
-  }
-
-  set type(value: Type) {
-    this.#type = check(value, rules.type);
-  }
-
-  /** The URL to the package's homepage. */
-  get homepage(): Maybe<string> {
-    return this.#homepage;
-  }
-
-  set homepage(value: Maybe<string>) {
-    this.#homepage = value && check(value, rules.homepage);
+    StringPropsMap.forEach(name => (this[name] = cast.toString(data[name])));
+    StringListPropsMap.forEach(name => cast.toSet(data[name], this[name]));
+    StringMapPropsMap.forEach(name => cast.toStringMap(data[name], this[name]));
+    DependenciesMapPropsMap.forEach(name => cast.toDependencyMap(data[name], this[name]));
   }
 
   // eslint-disable-next-line max-lines-per-function

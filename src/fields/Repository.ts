@@ -1,11 +1,11 @@
-import { Link } from '../core/Link';
 import { JSONValue } from '../types';
+import { Link } from './Link';
 
 export class Repository extends Link {
   directory?: string;
   type?: string;
 
-  constructor({ directory, type, url }: { directory?: string; type?: string; url: string }) {
+  constructor({ directory, type, url }: { directory?: string; type?: string; url?: string }) {
     super(url);
 
     this.directory = directory;
