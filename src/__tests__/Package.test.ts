@@ -38,6 +38,7 @@ const base = {
   files: ['__tests__/*.*'],
   type: 'module',
   main: 'lib/index.js',
+  exports: './lib/index.js',
   types: 'lib/index.d.ts',
   bin: 'lib/index.js',
   man: './man/doc.1',
@@ -128,6 +129,24 @@ const alternative = {
   },
   man: ['./man/foo.1', './man/bar.1'],
   repository: 'gitlab:user/repo',
+  exports: {
+    node: {
+      import: './feature-node.mjs',
+      require: './feature-node.cjs',
+    },
+    './feature': {
+      node: './feature-node.js',
+      default: './feature.js',
+    },
+    default: './feature.mjs',
+  },
+  imports: {
+    '#dep': {
+      node: 'dep-node-native',
+      default: './dep-polyfill.js',
+    },
+    '#internal/*': './src/internal/*.js',
+  },
 };
 
 describe('Package', () => {
