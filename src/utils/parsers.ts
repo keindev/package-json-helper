@@ -1,7 +1,9 @@
 import { BugsLocation } from '../fields/Bugs';
 import { Dependency } from '../fields/Dependency';
 import { DependencyMeta } from '../fields/DependencyMeta';
+import { ExportMap } from '../fields/ExportMap';
 import { Funding } from '../fields/Funding';
+import { ImportMap } from '../fields/ImportMap';
 import { Person } from '../fields/Person';
 import { Repository } from '../fields/Repository';
 import { JSONObject, JSONValue, Maybe } from '../types';
@@ -193,5 +195,44 @@ export const cast = {
     }
 
     return map;
+  },
+  toExportsMap: (data: JSONValue): ExportMap => {
+    const map = new Map<string, string | ExportMap | null>();
+
+    if (typeof data === 'string' || data === null) {
+      map.set('.', data ?? null);
+    } else {
+      const exportMap = cast.toObject(data);
+
+      if (exportMap) {
+        Object.entries(exportMap).forEach(([key, value]) => {
+          map.set(
+            key,
+            typeof value === 'string' || typeof value === 'undefined' || value === null
+              ? value ?? null
+              : cast.toExportsMap(value)
+          );
+        });
+      }
+    }
+
+    return new ExportMap({ map });
+  },
+  toImportsMap: (data: JSONValue): ImportMap => {
+    const map = new Map<string, string | ImportMap>();
+
+    if (typeof data === 'string') {
+      map.set('.', data);
+    } else {
+      const exportMap = cast.toObject(data);
+
+      if (exportMap) {
+        Object.entries(exportMap).forEach(([key, value]) => {
+          map.set(key, typeof value === 'string' ? value : cast.toImportsMap(value));
+        });
+      }
+    }
+
+    return new ImportMap({ map });
   },
 };

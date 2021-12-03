@@ -44,7 +44,24 @@ exports[`Package Parse alternative 1`] = `
     \\"jars\\": \\"java\\",
     \\"lib\\": \\"src/lib\\"
   },
-  \\"main\\": \\"lib/index.js\\",
+  \\"imports\\": {
+    \\"#dep\\": {
+      \\"node\\": \\"dep-node-native\\",
+      \\"default\\": \\"./dep-polyfill.js\\"
+    },
+    \\"#internal/*\\": \\"./src/internal/*.js\\"
+  },
+  \\"exports\\": {
+    \\"node\\": {
+      \\"import\\": \\"./feature-node.mjs\\",
+      \\"require\\": \\"./feature-node.cjs\\"
+    },
+    \\"./feature\\": {
+      \\"node\\": \\"./feature-node.js\\",
+      \\"default\\": \\"./feature.js\\"
+    },
+    \\"default\\": \\"./feature.mjs\\"
+  },
   \\"bin\\": {
     \\"name\\": \\"./path/to/program/index.js\\",
     \\"shortname\\": \\"./path/to/program/index.js\\"
@@ -144,7 +161,7 @@ exports[`Package Parse base 1`] = `
     \\"jars\\": \\"java\\",
     \\"lib\\": \\"src/lib\\"
   },
-  \\"main\\": \\"lib/index.js\\",
+  \\"exports\\": \\"./lib/index.js\\",
   \\"bin\\": {
     \\"test\\": \\"lib/index.js\\"
   },

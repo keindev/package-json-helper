@@ -1,8 +1,10 @@
 import { BugsLocation } from '../fields/Bugs';
 import { Dependency } from '../fields/Dependency';
 import { DependencyMeta } from '../fields/DependencyMeta';
+import { ExportMap } from '../fields/ExportMap';
 import Field from '../fields/Field';
 import { Funding } from '../fields/Funding';
+import { ImportMap } from '../fields/ImportMap';
 import { Person } from '../fields/Person';
 import { Repository } from '../fields/Repository';
 import {
@@ -41,10 +43,14 @@ class PackageBase extends AbstractPackage implements IPackageProps {
   readonly directories = new Map<string, string>();
   /** Engines that this package runs on. */
   readonly engines = new Map<string, string>();
+  /** Standard entry points of the package, with enhanced support for ECMAScript Modules. */
+  readonly exports: ExportMap;
   /** The files included in the package. */
   readonly files = new Set<string>();
   /** Describes and notifies consumers of a package's monetary support information. */
   readonly funding: Map<string, Funding>;
+  /** Import maps that only apply to import specifiers from within the package itself */
+  readonly imports: ImportMap;
   /** Keywords associated with package, listed in `npm search`. */
   readonly keywords = new Set<string>();
   /** The license for the package. */
@@ -89,6 +95,8 @@ class PackageBase extends AbstractPackage implements IPackageProps {
     this.funding = cast.toFundingList(data.funding);
     this.peerDependenciesMeta = cast.toDependencyMeta(data.peerDependenciesMeta);
     this.publishConfig = cast.toPublishConfig(data.publishConfig);
+    this.exports = cast.toExportsMap(data.exports);
+    this.imports = cast.toImportsMap(data.imports);
 
     StringPropsMap.forEach(name => (this[name] = cast.toString(data[name])));
     StringListPropsMap.forEach(name => cast.toSet(data[name], this[name]));
@@ -120,7 +128,9 @@ class PackageBase extends AbstractPackage implements IPackageProps {
         files: this.files,
         workspaces: this.workspaces,
         directories: this.directories,
-        main: this.main,
+        main: this.exports.map.size ? undefined : this.main,
+        imports: this.imports,
+        exports: this.exports,
         bin: this.bin,
         man: this.man,
         repository: this.repository,
