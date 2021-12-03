@@ -1,6 +1,6 @@
 {
   "name": "package-json-helper",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "keywords": [
     "package",
