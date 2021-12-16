@@ -18,7 +18,7 @@ abstract class AbstractPackage {
 
   constructor(data: JSONObject) {
     this.data = cloneDeep(data);
-    this.name = parsers.getString(rules.name)(data.name) || '';
+    this.name = data.name ? parsers.getString(rules.name)(data.name) || '' : '';
     this.#version = parsers.getString(rules.version)(data.version) || '';
     this.#homepage = parsers.getString(rules.homepage)(data.homepage);
     this.#type = data.type ? (parsers.getString(rules.type)(data.type) as PackageType) : PackageType.Commonjs;

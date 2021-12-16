@@ -10,7 +10,7 @@ import { JSONObject, JSONValue, Maybe } from '../types';
 import { check, EMAIL_REGEXP, IValidator, URL_REGEXP, validators } from './validators';
 
 const PERSON_REGEXP =
-  /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:(git\+)?http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;
+  /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:\w+?:\/\/)?[\w\\-]+(?:\.[\w-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;
 
 type IParser<T> = (value: JSONValue) => Maybe<T>;
 type IParserWrapper<T> = (validators?: IValidator<NonNullable<T>>[]) => IParser<Maybe<T>>;
@@ -84,11 +84,15 @@ export const cast = {
     return { url: cast.toUrl(url), ...others };
   },
   toBugsLocation: (data: JSONValue): Maybe<BugsLocation> => {
+    if (!data) return undefined;
+
     const { url, email } = cast.toLink(data);
 
     return url ? new BugsLocation({ url, email: cast.toString(email) }) : undefined;
   },
   toRepository: (data: JSONValue): Maybe<Repository> => {
+    if (!data) return undefined;
+
     const { url, type, directory } = cast.toLink(data);
 
     return url ? new Repository({ url, type: cast.toString(type), directory: cast.toString(directory) }) : undefined;
@@ -130,18 +134,21 @@ export const cast = {
   },
   toPerson: (data: JSONValue): Maybe<Person> => {
     let result;
-    const person = parsers.getObject([validators.hasProperties('Person name is required field', ['name'])])(
-      typeof data === 'string' ? data.match(PERSON_REGEXP)?.groups ?? {} : data
-    );
 
-    if (person) {
-      const name = cast.toString(person.name);
+    if (data) {
+      const person = parsers.getObject([validators.hasProperties('Person name is required field', ['name'])])(
+        typeof data === 'string' ? data.match(PERSON_REGEXP)?.groups ?? {} : data
+      );
 
-      if (name) {
-        const url = cast.toString(person.url);
-        const email = cast.toString(person.email);
+      if (person) {
+        const name = cast.toString(person.name);
 
-        result = new Person({ name, url: url && cast.toUrl(url), email: email && cast.toEmail(email) });
+        if (name) {
+          const url = cast.toString(person.url);
+          const email = cast.toString(person.email);
+
+          result = new Person({ name, url: url && cast.toUrl(url), email: email && cast.toEmail(email) });
+        }
       }
     }
 
