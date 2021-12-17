@@ -10,19 +10,11 @@ abstract class AbstractPackage {
   #name = '';
   #nameWithoutScope = '';
   #scope?: string;
-  #type: PackageType;
-  #version: string;
+  #type = PackageType.Commonjs;
+  #version?: string;
 
   // raw package object
-  protected data: JSONObject;
-
-  constructor(data: JSONObject) {
-    this.data = cloneDeep(data);
-    this.name = data.name ? parsers.getString(rules.name)(data.name) || '' : '';
-    this.#version = parsers.getString(rules.version)(data.version) || '';
-    this.#homepage = parsers.getString(rules.homepage)(data.homepage);
-    this.#type = data.type ? (parsers.getString(rules.type)(data.type) as PackageType) : PackageType.Commonjs;
-  }
+  protected data: JSONObject = {};
 
   /** Name of the package */
   get name(): string {
@@ -47,12 +39,12 @@ abstract class AbstractPackage {
   }
 
   /** Package version, parseable by [`node-semver`](https://github.com/npm/node-semver). */
-  get version(): string {
+  get version(): string | undefined {
     return this.#version;
   }
 
-  set version(value: string) {
-    this.#version = check(value, rules.version);
+  set version(value: string | undefined) {
+    this.#version = value && check(value, rules.version);
   }
 
   /** Resolution algorithm for importing ".js" files from the package's scope. */
@@ -71,6 +63,14 @@ abstract class AbstractPackage {
 
   set homepage(value: Maybe<string>) {
     this.#homepage = value && check(value, rules.homepage);
+  }
+
+  protected reset(data: JSONObject): void {
+    this.data = cloneDeep(data);
+    this.name = data.name ? parsers.getString(rules.name)(data.name) || '' : '';
+    this.#version = parsers.getString(rules.version)(data.version) || '';
+    this.#homepage = parsers.getString(rules.homepage)(data.homepage);
+    this.#type = data.type ? (parsers.getString(rules.type)(data.type) as PackageType) : PackageType.Commonjs;
   }
 }
 
