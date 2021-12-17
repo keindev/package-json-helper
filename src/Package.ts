@@ -1,5 +1,5 @@
 import { execa } from 'execa';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 
 import PackageBase from './core/PackageBase';
@@ -12,12 +12,9 @@ export class Package extends PackageBase {
   #manager = PackageManager.NPM;
 
   constructor(value?: string | JSONObject, manager?: PackageManager) {
-    super(
-      typeof value === 'object'
-        ? value
-        : (JSON.parse(fs.readFileSync(value ?? DEFAULT_FILE_PATH, 'utf-8')) as JSONObject)
-    );
+    super();
 
+    if (typeof value === 'object') this.reset(value);
     if (typeof value === 'string') this.#filePath = value;
     if (manager) this.#manager = manager;
   }
@@ -58,8 +55,14 @@ export class Package extends PackageBase {
     );
   }
 
-  save(filePath?: string): void {
-    fs.writeFileSync(filePath ?? this.#filePath, this.toString());
+  async read(): Promise<void> {
+    const data = await fs.readFile(this.#filePath ?? DEFAULT_FILE_PATH, 'utf-8');
+
+    super.reset(JSON.parse(data));
+  }
+
+  async save(filePath?: string): Promise<void> {
+    await fs.writeFile(filePath ?? this.#filePath, this.toString());
   }
 }
 
