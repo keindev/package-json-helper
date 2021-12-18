@@ -1,6 +1,6 @@
-# BREAKING CHANGES
+# :bug: Bug Fixes
 
-- Add async read method [`5adb71f`](https://github.com/keindev/package-json-helper/commit/5adb71f75e1582c1e1b5f853b2b614c460af784d)
+- Add final newline to package output string [`3d4f98e`](https://github.com/keindev/package-json-helper/commit/3d4f98e455331451f7edb8c0253ea92f2079e0db)
 
 ---
 
