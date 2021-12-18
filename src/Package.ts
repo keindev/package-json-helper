@@ -62,7 +62,7 @@ export class Package extends PackageBase {
   }
 
   async save(filePath?: string): Promise<void> {
-    await fs.writeFile(filePath ?? this.#filePath, this.toString());
+    await fs.writeFile(filePath ?? this.#filePath, this.toString() + '\n');
   }
 }
 
