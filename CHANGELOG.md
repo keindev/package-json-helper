@@ -1,6 +1,6 @@
-# :bug: Bug Fixes
+# BREAKING CHANGES
 
-- Fix package exports [`a607a78`](https://github.com/keindev/package-json-helper/commit/a607a7893180ee1b648b476350e0e81b058a8661)
+- Chage exports paths [`682113e`](https://github.com/keindev/package-json-helper/commit/682113e394aee5bc1c688f98894e584a918211a2)
 
 ---
 

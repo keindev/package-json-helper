@@ -1,6 +1,6 @@
 {
   "name": "package-json-helper",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "license": "MIT",
   "homepage": "https://github.com/keindev/package-json-helper#readme",
@@ -18,10 +18,10 @@
   "type": "module",
   "exports": {
     ".": "./lib/index.js",
-    "./lib/types": "./lib/types.js",
-    "./lib/core/*": "./lib/core/*.js",
-    "./lib/fields/*": "./lib/fields/*.js",
-    "./lib/utils/*": "./lib/utils/*.js"
+    "./types": "./lib/types.js",
+    "./core/*": "./lib/core/*.js",
+    "./fields/*": "./lib/fields/*.js",
+    "./utils/*": "./lib/utils/*.js"
   },
   "repository": {
     "type": "git",
