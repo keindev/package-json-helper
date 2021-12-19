@@ -177,9 +177,9 @@ describe('Package', () => {
           ['bar', '4.x'],
           ['boo', '>1.0.2'],
           ['none', '1.x'],
-          ['thr', '^3.3.8 <3.4.x'],
+          ['thr', '^3.3.x <3.4.x'],
         ])
       )
-    ).toMatchObject(['foo', 'bar', 'boo']);
+    ).toMatchObject(['foo', 'bar']);
   });
 });
