@@ -2,27 +2,27 @@
   "name": "package-json-helper",
   "version": "2.0.1",
   "description": "Helper for updating, comparing and fetching changes in package.json",
-  "homepage": "https://github.com/keindev/package-json-helper#readme",
   "license": "MIT",
+  "homepage": "https://github.com/keindev/package-json-helper#readme",
   "author": {
     "name": "Daniil Ryazanov",
     "email": "kein@tagproject.ru"
   },
   "keywords": [
-    "package",
-    "json",
     "helper",
+    "json",
+    "package",
     "util"
   ],
+  "types": "lib/index.d.ts",
   "type": "module",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keindev/package-json-helper.git"
   },
-  "bugs": {
-    "url": "https://github.com/keindev/package-json-helper/issues"
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
   },
   "scripts": {
     "build": "npm-run-all build:*",
@@ -40,9 +40,6 @@
     "test": "npm-run-all test:*",
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
-  "engines": {
-    "node": "^14.13.1 || >=16.0.0"
-  },
   "dependencies": {
     "execa": "^6.0.0",
     "lodash.clonedeep": "^4.5.0",
@@ -52,19 +49,19 @@
     "@tagproject/ts-package-shared-config": "^6.0.1",
     "@types/jest": "^27.0.3",
     "@types/lodash.clonedeep": "^4.5.6",
-    "@types/node": "^17.0.0",
+    "@types/node": "^17.0.1",
     "@types/semver": "^7.3.9",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
     "changelog-guru": "^3.0.2",
-    "cspell": "^5.13.3",
-    "eslint": "^8.4.1",
+    "cspell": "^5.13.4",
+    "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jest": "^25.3.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
-    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-promise": "^6.0.0",
     "ghinfo": "^2.0.3",
     "husky": "^7.0.4",
     "jest": "^27.4.5",
