@@ -28,6 +28,6 @@ export class Dependency extends Field {
   }
 
   isSatisfy(version: string): boolean {
-    return !!this.#version && (semver.satisfies(version, this.#version) || semver.subset(version, this.#version));
+    return !!this.#version && (semver.satisfies(version, this.#version) || semver.subset(this.#version, version));
   }
 }

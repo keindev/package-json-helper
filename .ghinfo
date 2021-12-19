@@ -1,11 +1,11 @@
 {
   "name": "package-json-helper",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "keywords": [
-    "package",
-    "json",
     "helper",
+    "json",
+    "package",
     "util"
   ],
   "repo": "keindev/package-json-helper",
