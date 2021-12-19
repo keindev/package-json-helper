@@ -16,7 +16,13 @@
   ],
   "types": "./lib/index.d.ts",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/types": "./lib/types.js",
+    "./lib/core/*": "./lib/core/*.js",
+    "./lib/fields/*": "./lib/fields/*.js",
+    "./lib/utils/*": "./lib/utils/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keindev/package-json-helper.git"
