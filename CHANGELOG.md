@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix exports [`feb73e6`](https://github.com/keindev/package-json-helper/commit/feb73e69e190a0efb9e4297a0aafc4c2a35bdc62)
+- Fix deps install, add save & reread calls [`a473513`](https://github.com/keindev/package-json-helper/commit/a4735131c8691fe3ff284ae927aed2de21e6c66c)
 
 ---
 
