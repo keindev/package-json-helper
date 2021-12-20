@@ -40,6 +40,7 @@ export class Package extends PackageBase {
   }
 
   async install(dependencies: Map<string, string | undefined>, flags?: string[]): Promise<void> {
+    await this.save();
     await execa(
       this.#manager,
       [
@@ -48,11 +49,10 @@ export class Package extends PackageBase {
         ...(flags ?? []),
       ],
       {
-        stdout: process.stdout,
-        stderr: process.stderr,
         cwd: process.cwd(),
       }
     );
+    await this.read();
   }
 
   async read(): Promise<void> {
