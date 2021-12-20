@@ -43,7 +43,7 @@ jobs:
     name: Publish
     needs: [ sync, config ]
     env:
-      NODE_VERSION: ${{ fromJson(needs.config.outputs.config).node.main }}
+      NODE_VERSION: ${{ fromJson(needs.config.outputs.config).node.main.version }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -78,7 +78,7 @@ jobs:
     name: Create Release
     needs: [ publish, config ]
     env:
-      NODE_VERSION: ${{ fromJson(needs.config.outputs.config).node.main }}
+      NODE_VERSION: ${{ fromJson(needs.config.outputs.config).node.main.version }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
