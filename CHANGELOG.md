@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix deps install, add save & reread calls [`a473513`](https://github.com/keindev/package-json-helper/commit/a4735131c8691fe3ff284ae927aed2de21e6c66c)
+- Remove brackets in install script [`9828b67`](https://github.com/keindev/package-json-helper/commit/9828b671527d167bd440c845a16145683338d0e2)
 
 ---
 
