@@ -45,7 +45,7 @@ export class Package extends PackageBase {
       this.#manager,
       [
         PackageInstallCommandMap[this.#manager],
-        ...[...dependencies.entries()].map(([name, version]) => (version ? `${name}@"${version}"` : name)),
+        ...[...dependencies.entries()].map(([name, version]) => (version ? `${name}@${version}` : name)),
         ...(flags ?? []),
       ],
       {
