@@ -1,6 +1,17 @@
+# Important Changes
+
+## Dependencies
+
+<details>
+<summary>Dev Dependencies</summary>
+
+- Bumped **[@tagproject/ts-package-shared-config](https://www.npmjs.com/package/@tagproject/ts-package-shared-config/v/6.2.1)** from `6.2.0` to `6.2.1`
+
+</details>
+
 # :bug: Bug Fixes
 
-- Remove brackets in install script [`9828b67`](https://github.com/keindev/package-json-helper/commit/9828b671527d167bd440c845a16145683338d0e2)
+- Bump shared config, refresh release script [`85beb43`](https://github.com/keindev/package-json-helper/commit/85beb432ed5ac831c519507ee4142e162265452b)
 
 ---
 
