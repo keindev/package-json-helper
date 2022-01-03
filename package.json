@@ -1,6 +1,6 @@
 {
   "name": "package-json-helper",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "license": "MIT",
   "homepage": "https://github.com/keindev/package-json-helper#readme",
