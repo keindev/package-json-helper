@@ -1,6 +1,6 @@
 {
   "name": "package-json-helper",
-  "version": "3.0.4",
+  "version": "3.0.6",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "keywords": [
     "helper",
@@ -11,9 +11,12 @@
   "repo": "keindev/package-json-helper",
   "type": "utils",
   "links": {
+    "homepage": "https://github.com/keindev/package-json-helper#readme",
     "git": "https://github.com/keindev/package-json-helper",
-    "npm": "https://www.npmjs.com/package/package-json-helper",
-    "homepage": "https://github.com/keindev/package-json-helper#readme"
+    "npm": "https://www.npmjs.com/package/package-json-helper"
   },
-  "files": {}
+  "files": {
+    "banner": "media/banner.svg",
+    "logo": "media/logo.svg"
+  }
 }

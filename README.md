@@ -1,3 +1,5 @@
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/keindev/package-json-helper/media/banner.svg" alt="Package logo"></p>
+
 <p align="center">
     <a href="https://github.com/keindev/package-json-helper/actions"><img src="https://github.com/keindev/package-json-helper/actions/workflows/build.yml/badge.svg" alt="Build Status"></a>
     <a href="https://codecov.io/gh/keindev/package-json-helper"><img src="https://codecov.io/gh/keindev/package-json-helper/branch/main/graph/badge.svg" /></a>
@@ -6,3 +8,39 @@
 </p>
 
 Package.json helper - reads / writes / controls :package:
+
+## Install
+
+```
+npm install package-json-helper --save-dev
+```
+
+## Usage
+
+```typescript
+import Package from 'package-json-helper';
+
+const pkg = new Package();
+
+await pkg.read();
+
+pkg.name = 'awesome-package-name';
+pkg.version = '0.9.0';
+
+await pkg.save();
+await pkg.install(
+  new Map([
+    ['eslint', '8.x'],
+    ['jest', '27.x'],
+  ]),
+  ['--save-dev']
+);
+```
+
+## Examples
+
+[standard-shared-config](https://github.com/keindev/standard-shared-config) - Easy way to create and share your boilerplate configs. One shared config to rule them all:loop::package:
+
+## API
+
+Read the [API documentation](docs/api/index.md) for more information.
