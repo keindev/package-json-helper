@@ -250,4 +250,20 @@ describe('Package', () => {
       },
     ]);
   });
+
+  it('Bump package version', () => {
+    const pkg = new Package({ name: 'test', version: '1.0.0' });
+
+    pkg.bump({ major: 1, minor: 1, patch: 1 });
+
+    expect(pkg.version).toBe('2.0.0');
+
+    pkg.bump({ minor: 1 });
+
+    expect(pkg.version).toBe('2.1.0');
+
+    pkg.bump({ patch: 1 });
+
+    expect(pkg.version).toBe('2.1.1');
+  });
 });

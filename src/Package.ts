@@ -1,6 +1,7 @@
 import { execa } from 'execa';
 import { promises as fs } from 'fs';
 import path from 'path';
+import semver from 'semver';
 
 import PackageBase from './core/PackageBase';
 import {
@@ -25,6 +26,17 @@ export class Package extends PackageBase {
 
   get json(): JSONObject {
     return JSON.parse(this.toString());
+  }
+
+  bump({ major, minor, patch }: { major?: number; minor?: number; patch?: number }): void {
+    if (this.version) {
+      let nextVersion: string | null | undefined;
+
+      if (major) nextVersion = semver.inc(this.version, 'major');
+      if (!major && minor) nextVersion = semver.inc(this.version, 'minor');
+      if (!major && !minor && patch) nextVersion = semver.inc(this.version, 'patch');
+      if (nextVersion) this.version = semver.coerce(nextVersion)?.version;
+    }
   }
 
   getChanges(property: PackageDependency | PackageRestriction, pkg: Package): IPackageChange[] {
