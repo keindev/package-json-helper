@@ -70,10 +70,10 @@ Returns list of missing dependencies
 
 #### Parameters
 
-| Name   | Type                   | Description                                                                                                                       |
-| :----- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `prop` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
-| `list` | `string[]`             | List with dependencies names                                                                                                      |
+| Name       | Type                   | Description                                                                                                                       |
+| :--------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| `property` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
+| `list`     | `string[]`             | List with dependencies names                                                                                                      |
 
 ### getWrongVersionDependencies
 
@@ -81,10 +81,10 @@ Returns a list of dependencies with an incorrect version
 
 #### Parameters
 
-| Name   | Type                   | Description                                                                                                                       |
-| :----- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `prop` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
-| `map`  | `Map<string, string>`  | Map of dependencies with name and version to check                                                                                |
+| Name       | Type                   | Description                                                                                                                       |
+| :--------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| `property` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
+| `map`      | `Map<string, string>`  | Map of dependencies with name and version to check                                                                                |
 
 ### install
 
