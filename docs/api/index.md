@@ -68,9 +68,44 @@ Bump package version
 
 | Name            | Type                  | Description                                |
 | :-------------- | :-------------------- | :----------------------------------------- |
-| `options.major` | `number \| undefined` | Bump major version, ignore minor and patch |
-| `options.minor` | `number \| undefined` | Bump minor version, ignore patch           |
-| `options.patch` | `number \| undefined` | Bump patch version                         |
+| `options.major` | _number \| undefined_ | Bump major version, ignore minor and patch |
+| `options.minor` | _number \| undefined_ | Bump minor version, ignore patch           |
+| `options.patch` | _number \| undefined_ | Bump patch version                         |
+
+### getChanges
+
+Return changes in package dependencies or restrictions
+
+```typescript
+export enum PackageDependency {
+  // https://docs.npmjs.com/files/package.json#engines
+  Engines = 'engines',
+  // https://docs.npmjs.com/files/package.json#dependencies
+  Dependencies = 'dependencies',
+  // https://docs.npmjs.com/files/package.json#devdependencies
+  DevDependencies = 'devDependencies',
+  // https://docs.npmjs.com/files/package.json#peerdependencies
+  PeerDependencies = 'peerDependencies',
+  // https://docs.npmjs.com/files/package.json#optionaldependencies
+  OptionalDependencies = 'optionalDependencies',
+}
+
+export enum PackageRestriction {
+  // https://docs.npmjs.com/files/package.json#bundleddependencies
+  BundledDependencies = 'bundledDependencies',
+  // https://docs.npmjs.com/files/package.json#os
+  OS = 'os',
+  // https://docs.npmjs.com/files/package.json#cpu
+  CPU = 'cpu',
+}
+```
+
+#### Parameters
+
+| Name       | Type                                      | Description                                |
+| :--------- | :---------------------------------------- | :----------------------------------------- |
+| `property` | _PackageDependency \| PackageRestriction_ | Property name from enums                   |
+| `pkg`      | _Package_                                 | Previous version package object to compare |
 
 ### getMissingDependencies
 
@@ -80,8 +115,8 @@ Returns list of missing dependencies
 
 | Name       | Type                   | Description                                                                                                                       |
 | :--------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `property` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
-| `list`     | `string[]`             | List with dependencies names                                                                                                      |
+| `property` | _DependenciesMapProps_ | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
+| `list`     | _string[]_             | List with dependencies names                                                                                                      |
 
 ### getWrongVersionDependencies
 
@@ -91,8 +126,8 @@ Returns a list of dependencies with an incorrect version
 
 | Name       | Type                   | Description                                                                                                                       |
 | :--------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `property` | `DependenciesMapProps` | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
-| `map`      | `Map<string, string>`  | Map of dependencies with name and version to check                                                                                |
+| `property` | _DependenciesMapProps_ | Value from enum, with dependencies field name, e.g. `dependencies \| devDependencies \| optionalDependencies \| peerDependencies` |
+| `map`      | _Map<string, string>_  | Map of dependencies with name and version to check                                                                                |
 
 ### install
 
@@ -102,8 +137,8 @@ Install dependencies
 
 | Name           | Type                               | Description                                          |
 | :------------- | :--------------------------------- | :--------------------------------------------------- |
-| `dependencies` | `Map<string, string \| undefined>` | Map of dependencies with name and version to install |
-| `flags`        | `string[] \| undefined`            | List of flags, e.g. `--save-dev`                     |
+| `dependencies` | _Map<string, string \| undefined>_ | Map of dependencies with name and version to install |
+| `flags`        | _string[] \| undefined_            | List of flags, e.g. `--save-dev`                     |
 
 ### read
 
@@ -117,7 +152,7 @@ Write current package structure to file
 
 | Name       | Type                  | Description |
 | :--------- | :-------------------- | :---------- |
-| `filePath` | `string \| undefined` | File path   |
+| `filePath` | _string \| undefined_ | File path   |
 
 ### toString
 
