@@ -3,7 +3,11 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 import PackageBase from './core/PackageBase';
-import { DependenciesMapProps, JSONObject, PackageInstallCommandMap, PackageManager } from './types';
+import {
+    DependenciesMapProps, IPackageChange, JSONObject, PackageChangeCompareResult, PackageDependency,
+    PackageDependencyChangeType, PackageInstallCommandMap, PackageManager, PackageRestriction,
+} from './types';
+import { getChangeType, getLink, getRestrictionName, getVersion } from './utils/dependencies';
 
 const DEFAULT_FILE_PATH = path.resolve(process.cwd(), 'package.json');
 
@@ -23,15 +27,32 @@ export class Package extends PackageBase {
     return JSON.parse(this.toString());
   }
 
-  getMissingDependencies(prop: DependenciesMapProps, list: string[]): string[] {
-    return list.filter(item => !this[prop].has(item));
+  getChanges(property: PackageDependency | PackageRestriction, pkg: Package): IPackageChange[] {
+    switch (property) {
+      case PackageDependency.Dependencies:
+      case PackageDependency.DevDependencies:
+      case PackageDependency.Engines:
+      case PackageDependency.OptionalDependencies:
+      case PackageDependency.PeerDependencies:
+        return this.getDependenciesChanges(property, pkg);
+      case PackageRestriction.BundledDependencies:
+      case PackageRestriction.CPU:
+      case PackageRestriction.OS:
+        return this.getRestrictionsChanges(property, pkg);
+      default:
+        return [];
+    }
   }
 
-  getWrongVersionDependencies(prop: DependenciesMapProps, map: Map<string, string>): string[] {
+  getMissingDependencies(property: DependenciesMapProps, list: string[]): string[] {
+    return list.filter(item => !this[property].has(item));
+  }
+
+  getWrongVersionDependencies(property: DependenciesMapProps, map: Map<string, string>): string[] {
     let dependency;
 
     return [...map.entries()].reduce((acc, [name, version]) => {
-      if ((dependency = this[prop].get(name)) && !dependency.isSatisfy(version)) {
+      if ((dependency = this[property].get(name)) && !dependency.isSatisfy(version)) {
         acc.push(name);
       }
 
@@ -63,6 +84,69 @@ export class Package extends PackageBase {
 
   async save(filePath?: string): Promise<void> {
     await fs.writeFile(filePath ?? this.#filePath, this.toString() + '\n');
+  }
+
+  private getDependenciesChanges(property: PackageDependency, pkg: Package): IPackageChange[] {
+    const changes: IPackageChange[] = [];
+    const currDeps = this[property];
+    const prevDeps = pkg[property];
+
+    currDeps.forEach((value, name) => {
+      const current = getVersion(value);
+      const link = getLink(property, name);
+      let previous;
+      let type = PackageDependencyChangeType.Added;
+
+      if (prevDeps.has(name)) {
+        previous = getVersion(prevDeps.get(name));
+        type = getChangeType(current, previous);
+        prevDeps.delete(name);
+      }
+
+      changes.push({ name, value: { current, previous }, type, link });
+    });
+
+    prevDeps.forEach((previous, name) => {
+      changes.push({
+        name,
+        type: PackageDependencyChangeType.Removed,
+        link: getLink(property, name),
+        value: { previous: getVersion(previous) },
+      });
+    });
+
+    return [...changes.values()].filter(change => change.type !== PackageDependencyChangeType.Unchanged);
+  }
+
+  private getRestrictionsChanges(property: PackageRestriction, pkg: Package): IPackageChange[] {
+    const changes: IPackageChange[] = [];
+    const restrictions = [...pkg[property].values()];
+    const compareMap = {
+      [PackageChangeCompareResult.Less]: PackageDependencyChangeType.Changed,
+      [PackageChangeCompareResult.More]: PackageDependencyChangeType.Changed,
+      [PackageChangeCompareResult.Equal]: PackageDependencyChangeType.Unchanged,
+    };
+
+    changes.push(
+      ...[...this[property].values()].map(current => {
+        const index = restrictions.indexOf(current);
+        const previous = restrictions[index];
+        const type = previous
+          ? compareMap[current.localeCompare(previous) as PackageChangeCompareResult]
+          : PackageDependencyChangeType.Added;
+
+        if (previous) restrictions.splice(index, 1);
+
+        return { name: getRestrictionName(current), value: { current, previous }, type };
+      }),
+      ...restrictions.map(previous => ({
+        name: getRestrictionName(previous),
+        type: PackageDependencyChangeType.Removed,
+        value: { previous },
+      }))
+    );
+
+    return [...changes.values()].filter(change => change.type !== PackageDependencyChangeType.Unchanged);
   }
 }
 

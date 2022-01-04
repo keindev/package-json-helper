@@ -1,5 +1,5 @@
 import Package from '../Package';
-import { DependenciesMapProps } from '../types';
+import { DependenciesMapProps, PackageDependency, PackageRestriction } from '../types';
 
 const base = {
   name: 'test',
@@ -181,5 +181,73 @@ describe('Package', () => {
         ])
       )
     ).toMatchObject(['foo', 'bar']);
+  });
+
+  it('Check dependencies changes', () => {
+    const package1 = new Package({
+      name: 'test',
+      devDependencies: { 'dependency-1': '^15.0.5', 'dependency-2': '^0.9.0', 'dependency-3': '2.0.0' },
+      engines: {
+        node: '^14.13.1 || >=16.0.0',
+      },
+      os: ['darwin', 'linux'],
+    });
+    const package2 = new Package({
+      name: 'test',
+      devDependencies: { 'dependency-1': '^14.0.0', 'dependency-2': '^1.0.5', 'dependency-3': '2.0.0' },
+      engines: {
+        node: '>=14.0.0',
+      },
+      os: ['!win32', 'linux'],
+    });
+
+    expect(package1.getChanges(PackageDependency.DevDependencies, package2)).toMatchObject([
+      {
+        link: 'https://www.npmjs.com/package/dependency-1',
+        name: 'dependency-1',
+        type: 'bumped',
+        value: {
+          current: '^15.0.5',
+          previous: '^14.0.0',
+        },
+      },
+      {
+        link: 'https://www.npmjs.com/package/dependency-2',
+        name: 'dependency-2',
+        type: 'downgraded',
+        value: {
+          current: '^0.9.0',
+          previous: '^1.0.5',
+        },
+      },
+    ]);
+    expect(package1.getChanges(PackageDependency.Engines, package2)).toMatchObject([
+      {
+        link: undefined,
+        name: 'node',
+        type: 'changed',
+        value: {
+          current: '^14.13.1 || >=16.0.0',
+          previous: '>=14.0.0',
+        },
+      },
+    ]);
+    expect(package1.getChanges(PackageRestriction.OS, package2)).toMatchObject([
+      {
+        name: 'darwin',
+        type: 'added',
+        value: {
+          current: 'darwin',
+          previous: undefined,
+        },
+      },
+      {
+        name: 'win32',
+        type: 'removed',
+        value: {
+          previous: '!win32',
+        },
+      },
+    ]);
   });
 });
