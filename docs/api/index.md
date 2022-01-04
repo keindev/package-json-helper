@@ -60,9 +60,17 @@ constructor(value?: string | JSONObject, manager?: PackageManager): Package
 
 ## Methods
 
-### toString
+### bump
 
-Returns package.json structure as string
+Bump package version
+
+#### Parameters
+
+| Name            | Type                  | Description                                |
+| :-------------- | :-------------------- | :----------------------------------------- |
+| `options.major` | `number \| undefined` | Bump major version, ignore minor and patch |
+| `options.minor` | `number \| undefined` | Bump minor version, ignore patch           |
+| `options.patch` | `number \| undefined` | Bump patch version                         |
 
 ### getMissingDependencies
 
@@ -110,3 +118,7 @@ Write current package structure to file
 | Name       | Type                  | Description |
 | :--------- | :-------------------- | :---------- |
 | `filePath` | `string \| undefined` | File path   |
+
+### toString
+
+Returns package.json structure as string
