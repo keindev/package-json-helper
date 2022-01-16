@@ -280,4 +280,14 @@ describe('Package', () => {
 
     expect(pkg.version).toBe('2.1.1');
   });
+
+  it('Create empty package', () => {
+    let pkg;
+
+    try {
+      pkg = new Package({});
+    } finally {
+      expect(pkg instanceof Package).toBeDefined();
+    }
+  });
 });
