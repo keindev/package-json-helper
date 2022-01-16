@@ -135,8 +135,8 @@ class PackageBase extends AbstractPackage implements IPackageProps {
           return Object.fromEntries([...value.entries()].sort(([a], [b]) => a.localeCompare(b)));
         }
         if (typeof value === 'object') {
-          if (Object.keys(value).length === 0) return undefined;
           if (value instanceof Field) return value.getSnapshot();
+          if (Object.keys(value).length === 0) return undefined;
         }
 
         return value;

@@ -55,7 +55,7 @@ export const cast = {
     }
   },
   toSet: (data: JSONValue, list: Set<string>): void => {
-    const values = cast.toArray(data);
+    const values = typeof data === 'string' ? [data] : cast.toArray(data);
 
     if (values) {
       values.forEach(rawValue => {
@@ -187,7 +187,7 @@ export const cast = {
     };
 
     if (Array.isArray(data)) data.forEach(append);
-    else if (typeof data === 'string') append(data);
+    else if (typeof data === 'object' || typeof data === 'string') append(data);
 
     return map;
   },

@@ -5,24 +5,23 @@
 <details>
 <summary>Dev Dependencies</summary>
 
-- Bumped **[@types/node](https://www.npmjs.com/package/@types/node/v/17.0.8)** from `17.0.7` to `17.0.8`
+- Changed **[@tagproject/ts-package-shared-config](https://www.npmjs.com/package/@tagproject/ts-package-shared-config)** from `^6.4.0` to `^6.4.1`
+- Changed **[@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)** from `^5.9.0` to `^5.9.1`
+- Changed **[@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser)** from `^5.9.0` to `^5.9.1`
+- Changed **[cspell](https://www.npmjs.com/package/cspell)** from `^5.14.0` to `^5.15.2`
+- Changed **[eslint](https://www.npmjs.com/package/eslint)** from `^8.6.0` to `^8.7.0`
+- Changed **[eslint-plugin-jest](https://www.npmjs.com/package/eslint-plugin-jest)** from `^25.3.4` to `^25.7.0`
+- Changed **[figma-portal](https://www.npmjs.com/package/figma-portal)** from `^0.10.0` to `^0.10.1`
+- Changed **[ghinfo](https://www.npmjs.com/package/ghinfo)** from `^3.0.0` to `^3.0.1`
+- Changed **[jest](https://www.npmjs.com/package/jest)** from `^27.4.5` to `^27.4.7`
+- Changed **[ts-jest](https://www.npmjs.com/package/ts-jest)** from `^27.1.2` to `^27.1.3`
+- Bumped **[changelog-guru](https://www.npmjs.com/package/changelog-guru)** from `^3.0.2` to `^4.0.1`
 
 </details>
 
-# :tada: Features
+# :bug: Bug Fixes
 
-- Add `getChanges` method to return package deps changes [`852ae55`](https://github.com/keindev/package-json-helper/commit/852ae5506ef7c356a078acfac511096f36f472c3)
-- Add package version bump method [`bcbaa78`](https://github.com/keindev/package-json-helper/commit/bcbaa78e294ddc75c2a81c813894aea7de211ae6)
-
-# :fire: Improvements
-
-- Fix install method, remove save & read calls [`7afb370`](https://github.com/keindev/package-json-helper/commit/7afb370f0a2fc49762c08228b0c453f0b1d2cc84)
-
-# :memo: Internal changes
-
-- Rename prop to property [`5181791`](https://github.com/keindev/package-json-helper/commit/518179128b158d7189ba945dca01e77f11a868ec)
-- Add bump method description [`1617e01`](https://github.com/keindev/package-json-helper/commit/1617e014e0ff38640b924cb2f5cf1e15b99f66b6)
-- Add `getChanges` method description [`deabbcf`](https://github.com/keindev/package-json-helper/commit/deabbcfdb9396686496a162953d132a9b78f5258)
+- Fix bugs, man & main output excluding bug [`12dafe2`](https://github.com/keindev/package-json-helper/commit/12dafe28d58b94e0503b9b2b89cbc1e0182934bd)
 
 ---
 
