@@ -1,230 +1,244 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Package Parse alternative 1`] = `
-"{
-  \\"name\\": \\"@scope/package\\",
-  \\"version\\": \\"1.0.1\\",
-  \\"description\\": \\"package description\\",
-  \\"license\\": \\"SEE LICENSE IN LICENSE_FILE\\",
-  \\"private\\": true,
-  \\"homepage\\": \\"https://github.com/owner/project#readme\\",
-  \\"author\\": \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\",
-  \\"contributors\\": [
-    \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
+Object {
+  "author": "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
+  "bin": Object {
+    "name": "./path/to/program/index.js",
+    "shortname": "./path/to/program/index.js",
+  },
+  "browser": "lib/index.js",
+  "bugs": "https://github.com/owner/project/issues",
+  "bundledDependencies": Array [
+    "render-blender",
+    "super-streams",
   ],
-  \\"maintainers\\": [
-    \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
+  "config": Object {
+    "port": "8080",
+  },
+  "contributors": Array [
+    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  \\"keywords\\": [
-    \\"jest\\",
-    \\"test\\"
+  "cpu": Array [
+    "!arm",
+    "ia32",
+    "x64",
   ],
-  \\"funding\\": [
-    {
-      \\"url\\": \\"http://example.com/donate\\",
-      \\"type\\": \\"individual\\"
+  "dependencies": Object {
+    "asd": "http://asdf.com/asdf.tar.gz",
+    "bar": ">=1.0.2 <2.1.2",
+    "baz": ">1.0.2 <=2.3.4",
+    "boo": "2.0.1",
+    "dyl": "file:../dyl",
+    "elf": "~1.2.3",
+    "foo": "1.0.0 - 2.9999.9999",
+    "lat": "latest",
+    "qux": "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0",
+    "thr": "3.3.x",
+    "til": "~1.2",
+    "two": "2.x",
+  },
+  "description": "package description",
+  "devDependencies": Object {
+    "super-script": "~1.6.3",
+  },
+  "directories": Object {
+    "bin": "local/binaries",
+    "jars": "java",
+    "lib": "src/lib",
+  },
+  "engines": Object {
+    "node": ">=0.10.3 <15",
+  },
+  "exports": Object {
+    "./feature": Object {
+      "default": "./feature.js",
+      "node": "./feature-node.js",
     },
-    \\"http://example.com/donateAlso\\",
-    {
-      \\"url\\": \\"https://www.patreon.com/my-account\\",
-      \\"type\\": \\"patreon\\"
-    }
-  ],
-  \\"types\\": \\"lib/index.d.ts\\",
-  \\"browser\\": \\"lib/index.js\\",
-  \\"type\\": \\"module\\",
-  \\"files\\": [
-    \\"__tests__/*.*\\"
-  ],
-  \\"workspaces\\": [
-    \\"./packages/*\\"
-  ],
-  \\"directories\\": {
-    \\"bin\\": \\"local/binaries\\",
-    \\"jars\\": \\"java\\",
-    \\"lib\\": \\"src/lib\\"
-  },
-  \\"imports\\": {
-    \\"#dep\\": {
-      \\"node\\": \\"dep-node-native\\",
-      \\"default\\": \\"./dep-polyfill.js\\"
+    "default": "./feature.mjs",
+    "node": Object {
+      "import": "./feature-node.mjs",
+      "require": "./feature-node.cjs",
     },
-    \\"#internal/*\\": \\"./src/internal/*.js\\"
   },
-  \\"exports\\": {
-    \\"node\\": {
-      \\"import\\": \\"./feature-node.mjs\\",
-      \\"require\\": \\"./feature-node.cjs\\"
+  "files": Array [
+    "__tests__/*.*",
+  ],
+  "funding": Array [
+    Object {
+      "type": "individual",
+      "url": "http://example.com/donate",
     },
-    \\"./feature\\": {
-      \\"node\\": \\"./feature-node.js\\",
-      \\"default\\": \\"./feature.js\\"
+    "http://example.com/donateAlso",
+    Object {
+      "type": "patreon",
+      "url": "https://www.patreon.com/my-account",
     },
-    \\"default\\": \\"./feature.mjs\\"
-  },
-  \\"bin\\": {
-    \\"name\\": \\"./path/to/program/index.js\\",
-    \\"shortname\\": \\"./path/to/program/index.js\\"
-  },
-  \\"man\\": [
-    \\"./man/bar.1\\",
-    \\"./man/foo.1\\"
   ],
-  \\"repository\\": \\"gitlab:user/repo\\",
-  \\"config\\": {
-    \\"port\\": \\"8080\\"
+  "homepage": "https://github.com/owner/project#readme",
+  "imports": Object {
+    "#dep": Object {
+      "default": "./dep-polyfill.js",
+      "node": "dep-node-native",
+    },
+    "#internal/*": "./src/internal/*.js",
   },
-  \\"publishConfig\\": {
-    \\"allow-same-version\\": true
-  },
-  \\"os\\": [
-    \\"!win32\\",
-    \\"darwin\\",
-    \\"linux\\"
+  "keywords": Array [
+    "jest",
+    "test",
   ],
-  \\"cpu\\": [
-    \\"!arm\\",
-    \\"ia32\\",
-    \\"x64\\"
+  "license": "SEE LICENSE IN LICENSE_FILE",
+  "maintainers": Array [
+    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  \\"engines\\": {
-    \\"node\\": \\">=0.10.3 <15\\"
-  },
-  \\"scripts\\": {
-    \\"compress\\": \\"{{ run command to compress files }}\\",
-    \\"prepare\\": \\"command -o lib/ -c src/index.js\\"
-  },
-  \\"dependencies\\": {
-    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
-    \\"bar\\": \\">=1.0.2 <2.1.2\\",
-    \\"baz\\": \\">1.0.2 <=2.3.4\\",
-    \\"boo\\": \\"2.0.1\\",
-    \\"dyl\\": \\"file:../dyl\\",
-    \\"elf\\": \\"~1.2.3\\",
-    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
-    \\"lat\\": \\"latest\\",
-    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
-    \\"thr\\": \\"3.3.x\\",
-    \\"til\\": \\"~1.2\\",
-    \\"two\\": \\"2.x\\"
-  },
-  \\"devDependencies\\": {
-    \\"super-script\\": \\"~1.6.3\\"
-  },
-  \\"peerDependencies\\": {
-    \\"soy-milk\\": \\"1.2\\",
-    \\"tea\\": \\"2.x\\"
-  },
-  \\"peerDependenciesMeta\\": {
-    \\"soy-milk\\": {
-      \\"optional\\": true
-    }
-  },
-  \\"bundledDependencies\\": [
-    \\"render-blender\\",
-    \\"super-streams\\"
+  "man": Array [
+    "./man/bar.1",
+    "./man/foo.1",
   ],
-  \\"optionalDependencies\\": {
-    \\"some-pkg\\": \\"1.x\\"
-  }
-}"
+  "name": "@scope/package",
+  "optionalDependencies": Object {
+    "some-pkg": "1.x",
+  },
+  "os": Array [
+    "!win32",
+    "darwin",
+    "linux",
+  ],
+  "peerDependencies": Object {
+    "soy-milk": "1.2",
+    "tea": "2.x",
+  },
+  "peerDependenciesMeta": Object {
+    "soy-milk": Object {
+      "optional": true,
+    },
+  },
+  "private": true,
+  "publishConfig": Object {
+    "allow-same-version": true,
+  },
+  "repository": "gitlab:user/repo",
+  "scripts": Object {
+    "compress": "{{ run command to compress files }}",
+    "prepare": "command -o lib/ -c src/index.js",
+  },
+  "type": "module",
+  "types": "lib/index.d.ts",
+  "version": "1.0.1",
+  "workspaces": Array [
+    "./packages/*",
+  ],
+}
 `;
 
 exports[`Package Parse base 1`] = `
-"{
-  \\"name\\": \\"test\\",
-  \\"version\\": \\"1.0.1\\",
-  \\"description\\": \\"package description\\",
-  \\"license\\": \\"(MIT OR Apache-2.0)\\",
-  \\"homepage\\": \\"https://github.com/owner/project#readme\\",
-  \\"author\\": \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\",
-  \\"contributors\\": [
-    \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
+Object {
+  "author": "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
+  "bin": Object {
+    "test": "lib/index.js",
+  },
+  "bugs": Object {
+    "email": "project@hostname.com",
+    "url": "https://github.com/owner/project/issues",
+  },
+  "bundledDependencies": Array [
+    "render-blender",
+    "super-streams",
   ],
-  \\"maintainers\\": [
-    \\"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)\\"
+  "config": Object {
+    "port": "8080",
+  },
+  "contributors": Array [
+    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  \\"keywords\\": [
-    \\"jest\\",
-    \\"test\\"
+  "cpu": Array [
+    "!arm",
+    "ia32",
+    "x64",
   ],
-  \\"types\\": \\"lib/index.d.ts\\",
-  \\"type\\": \\"module\\",
-  \\"files\\": [
-    \\"__tests__/*.*\\"
+  "dependencies": Object {
+    "asd": "http://asdf.com/asdf.tar.gz",
+    "bar": ">=1.0.2 <2.1.2",
+    "baz": ">1.0.2 <=2.3.4",
+    "boo": "2.0.1",
+    "dyl": "file:../dyl",
+    "elf": "~1.2.3",
+    "foo": "1.0.0 - 2.9999.9999",
+    "lat": "latest",
+    "qux": "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0",
+    "thr": "3.3.x",
+    "til": "~1.2",
+    "two": "2.x",
+  },
+  "description": "package description",
+  "devDependencies": Object {
+    "super-script": "~1.6.3",
+  },
+  "directories": Object {
+    "bin": "local/binaries",
+    "jars": "java",
+    "lib": "src/lib",
+  },
+  "engines": Object {
+    "node": ">=0.10.3 <15",
+  },
+  "exports": "./lib/index.js",
+  "files": Array [
+    "__tests__/*.*",
   ],
-  \\"workspaces\\": [
-    \\"./packages/*\\"
+  "funding": Array [
+    Object {
+      "type": "individual",
+      "url": "http://example.com/donate",
+    },
   ],
-  \\"directories\\": {
-    \\"bin\\": \\"local/binaries\\",
-    \\"jars\\": \\"java\\",
-    \\"lib\\": \\"src/lib\\"
-  },
-  \\"exports\\": \\"./lib/index.js\\",
-  \\"bin\\": {
-    \\"test\\": \\"lib/index.js\\"
-  },
-  \\"repository\\": {
-    \\"type\\": \\"git\\",
-    \\"url\\": \\"https://github.com/facebook/react.git\\",
-    \\"directory\\": \\"packages/react-dom\\"
-  },
-  \\"config\\": {
-    \\"port\\": \\"8080\\"
-  },
-  \\"publishConfig\\": {
-    \\"allow-same-version\\": true
-  },
-  \\"os\\": [
-    \\"!win32\\",
-    \\"darwin\\",
-    \\"linux\\"
+  "homepage": "https://github.com/owner/project#readme",
+  "keywords": Array [
+    "jest",
+    "test",
   ],
-  \\"cpu\\": [
-    \\"!arm\\",
-    \\"ia32\\",
-    \\"x64\\"
+  "license": "(MIT OR Apache-2.0)",
+  "maintainers": Array [
+    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  \\"engines\\": {
-    \\"node\\": \\">=0.10.3 <15\\"
-  },
-  \\"scripts\\": {
-    \\"compress\\": \\"{{ run command to compress files }}\\",
-    \\"prepare\\": \\"command -o lib/ -c src/index.js\\"
-  },
-  \\"dependencies\\": {
-    \\"asd\\": \\"http://asdf.com/asdf.tar.gz\\",
-    \\"bar\\": \\">=1.0.2 <2.1.2\\",
-    \\"baz\\": \\">1.0.2 <=2.3.4\\",
-    \\"boo\\": \\"2.0.1\\",
-    \\"dyl\\": \\"file:../dyl\\",
-    \\"elf\\": \\"~1.2.3\\",
-    \\"foo\\": \\"1.0.0 - 2.9999.9999\\",
-    \\"lat\\": \\"latest\\",
-    \\"qux\\": \\"<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0\\",
-    \\"thr\\": \\"3.3.x\\",
-    \\"til\\": \\"~1.2\\",
-    \\"two\\": \\"2.x\\"
-  },
-  \\"devDependencies\\": {
-    \\"super-script\\": \\"~1.6.3\\"
-  },
-  \\"peerDependencies\\": {
-    \\"soy-milk\\": \\"1.2\\",
-    \\"tea\\": \\"2.x\\"
-  },
-  \\"peerDependenciesMeta\\": {
-    \\"soy-milk\\": {
-      \\"optional\\": true
-    }
-  },
-  \\"bundledDependencies\\": [
-    \\"render-blender\\",
-    \\"super-streams\\"
+  "man": Array [
+    "./man/doc.1",
   ],
-  \\"optionalDependencies\\": {
-    \\"some-pkg\\": \\"1.x\\"
-  }
-}"
+  "name": "test",
+  "optionalDependencies": Object {
+    "some-pkg": "1.x",
+  },
+  "os": Array [
+    "!win32",
+    "darwin",
+    "linux",
+  ],
+  "peerDependencies": Object {
+    "soy-milk": "1.2",
+    "tea": "2.x",
+  },
+  "peerDependenciesMeta": Object {
+    "soy-milk": Object {
+      "optional": true,
+    },
+  },
+  "publishConfig": Object {
+    "allow-same-version": true,
+  },
+  "repository": Object {
+    "directory": "packages/react-dom",
+    "type": "git",
+    "url": "https://github.com/facebook/react.git",
+  },
+  "scripts": Object {
+    "compress": "{{ run command to compress files }}",
+    "prepare": "command -o lib/ -c src/index.js",
+  },
+  "type": "module",
+  "types": "lib/index.d.ts",
+  "version": "1.0.1",
+  "workspaces": Array [
+    "./packages/*",
+  ],
+}
 `;

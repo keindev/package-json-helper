@@ -152,14 +152,28 @@ const alternative = {
 describe('Package', () => {
   const pkgBase = new Package(base);
   const pkgAlternative = new Package(alternative);
+  const excludes = [
+    // Package has exports, main will be excluded from output
+    'main',
+  ];
 
   it('Parse base', () => {
-    expect(pkgBase.toString()).toMatchSnapshot();
+    const data = JSON.parse(pkgBase.toString());
+    const keys = Object.keys(base).filter(key => !excludes.includes(key));
+
+    keys.forEach(key => expect(key in data).toBeTruthy());
+
+    expect(data).toMatchSnapshot();
   });
 
   it('Parse alternative', () => {
+    const data = JSON.parse(pkgAlternative.toString());
+    const keys = Object.keys(alternative).filter(key => !excludes.includes(key));
+
+    keys.forEach(key => expect(key in data).toBeTruthy());
+
     expect(pkgAlternative.scope).toBe('scope');
-    expect(pkgAlternative.toString()).toMatchSnapshot();
+    expect(data).toMatchSnapshot();
   });
 
   it('Check missing dependencies', () => {
