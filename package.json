@@ -40,10 +40,12 @@
     "generate:media": "node --experimental-specifier-resolution=node node_modules/.bin/figma-portal extract -d media -p GitHub",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "rimraf coverage && eslint \"src/**\" --ext .ts",
-    "lint:spell": "cspell -c .vscode/cspell.json --no-summary \"README.md\" \"src/**/*.ts\"",
+    "lint:spell": "cspell -c .vscode/cspell.json --no-summary \"**/*.{js,ts,tsx,md,yml,json}\"",
     "prepare": "npm-run-all prepare:*",
     "prepare:config": "node --experimental-specifier-resolution=node node_modules/.bin/ts-package-shared-config",
+    "prepare:docs": "node --experimental-specifier-resolution=node node_modules/.bin/docs-shared-config",
     "prepare:husky": "husky install",
+    "prepare:vscode": "node --experimental-specifier-resolution=node node_modules/.bin/vscode-shared-config",
     "release": "npm-run-all prepare lint test build generate",
     "test": "npm-run-all test:*",
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
