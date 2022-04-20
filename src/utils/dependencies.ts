@@ -1,7 +1,7 @@
 import semver from 'semver';
 
-import { Dependency } from '../fields/Dependency';
-import { PackageChangeCompareResult, PackageDependency, PackageDependencyChangeType } from '../types';
+import { Dependency } from '../fields/Dependency.js';
+import { PackageChangeCompareResult, PackageDependency, PackageDependencyChangeType } from '../types.js';
 
 const PackageChangeCompareMap = {
   [PackageChangeCompareResult.Less]: PackageDependencyChangeType.Downgraded,

@@ -1,5 +1,5 @@
-import Package from '../Package';
-import { DependenciesMapProps, PackageDependency, PackageRestriction } from '../types';
+import Package from '../Package.js';
+import { DependenciesMapProps, PackageDependency, PackageRestriction } from '../types.js';
 
 const base = {
   name: 'test',

@@ -1,13 +1,13 @@
-import { BugsLocation } from '../fields/Bugs';
-import { Dependency } from '../fields/Dependency';
-import { DependencyMeta } from '../fields/DependencyMeta';
-import { ExportMap } from '../fields/ExportMap';
-import { Funding } from '../fields/Funding';
-import { ImportMap } from '../fields/ImportMap';
-import { Person } from '../fields/Person';
-import { Repository } from '../fields/Repository';
-import { JSONObject, JSONValue, Maybe } from '../types';
-import { check, EMAIL_REGEXP, IValidator, URL_REGEXP, validators } from './validators';
+import { BugsLocation } from '../fields/Bugs.js';
+import { Dependency } from '../fields/Dependency.js';
+import { DependencyMeta } from '../fields/DependencyMeta.js';
+import { ExportMap } from '../fields/ExportMap.js';
+import { Funding } from '../fields/Funding.js';
+import { ImportMap } from '../fields/ImportMap.js';
+import { Person } from '../fields/Person.js';
+import { Repository } from '../fields/Repository.js';
+import { JSONObject, JSONValue, Maybe } from '../types.js';
+import { check, EMAIL_REGEXP, IValidator, URL_REGEXP, validators } from './validators.js';
 
 const PERSON_REGEXP =
   /^(?<name>^[ 1-9_a-z-]+)(?<emailWrapper> <(?<email>[\w!#$%&'*+./=?^`{|}~-]+@[\da-z-]+(?:\.[\da-z-]+)*)>)?(?<urlWrapper> \((?<url>(?:\w+?:\/\/)?[\w\\-]+(?:\.[\w-]+)+[\w!#$&'()*+,./:;=?@[\]~-]+)\))?$/i;

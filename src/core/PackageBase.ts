@@ -1,18 +1,18 @@
-import { BugsLocation } from '../fields/Bugs';
-import { Dependency } from '../fields/Dependency';
-import { DependencyMeta } from '../fields/DependencyMeta';
-import { ExportMap } from '../fields/ExportMap';
-import Field from '../fields/Field';
-import { Funding } from '../fields/Funding';
-import { ImportMap } from '../fields/ImportMap';
-import { Person } from '../fields/Person';
-import { Repository } from '../fields/Repository';
+import { BugsLocation } from '../fields/Bugs.js';
+import { Dependency } from '../fields/Dependency.js';
+import { DependencyMeta } from '../fields/DependencyMeta.js';
+import { ExportMap } from '../fields/ExportMap.js';
+import Field from '../fields/Field.js';
+import { Funding } from '../fields/Funding.js';
+import { ImportMap } from '../fields/ImportMap.js';
+import { Person } from '../fields/Person.js';
+import { Repository } from '../fields/Repository.js';
 import {
     DependenciesMapPropsMap, IPackageProps, JSONObject, JSONValue, StringListPropsMap, StringMapPropsMap,
     StringPropsMap,
-} from '../types';
-import { cast } from '../utils/parsers';
-import AbstractPackage from './AbstractPackage';
+} from '../types.js';
+import { cast } from '../utils/parsers.js';
+import AbstractPackage from './AbstractPackage.js';
 
 const TAB_WIDTH = 2;
 
