@@ -1,9 +1,9 @@
 import cloneDeep from 'lodash.clonedeep';
 
-import { JSONObject, Maybe, PackageType } from '../types';
-import { parsers } from '../utils/parsers';
-import rules from '../utils/rules';
-import { check } from '../utils/validators';
+import { JSONObject, Maybe, PackageType } from '../types.js';
+import { parsers } from '../utils/parsers.js';
+import rules from '../utils/rules.js';
+import { check } from '../utils/validators.js';
 
 abstract class AbstractPackage {
   #homepage?: string;

@@ -3,12 +3,12 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import semver from 'semver';
 
-import PackageBase from './core/PackageBase';
+import PackageBase from './core/PackageBase.js';
 import {
     DependenciesMapProps, IPackageChange, JSONObject, PackageChangeCompareResult, PackageDependency,
     PackageDependencyChangeType, PackageInstallCommandMap, PackageManager, PackageRestriction,
-} from './types';
-import { getChangeType, getLink, getRestrictionName, getVersion } from './utils/dependencies';
+} from './types.js';
+import { getChangeType, getLink, getRestrictionName, getVersion } from './utils/dependencies.js';
 
 const DEFAULT_FILE_PATH = path.resolve(process.cwd(), 'package.json');
 

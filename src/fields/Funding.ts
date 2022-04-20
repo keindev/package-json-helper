@@ -1,5 +1,5 @@
-import { JSONValue } from '../types';
-import { Link } from './Link';
+import { JSONValue } from '../types.js';
+import { Link } from './Link.js';
 
 export class Funding extends Link {
   /** The type of funding. */

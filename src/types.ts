@@ -1,4 +1,4 @@
-import { Dependency } from './fields/Dependency';
+import { Dependency } from './fields/Dependency.js';
 
 export enum PackageManager {
   NPM = 'npm',

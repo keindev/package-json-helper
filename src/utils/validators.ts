@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { JSONObject } from '../types';
+import { JSONObject } from '../types.js';
 
 export type IValidator<T> = (value: T) => true | string;
 type IValidatorCallback<T, K> = (value: T, ...props: K[]) => boolean;
