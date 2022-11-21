@@ -1,30 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Package Parse alternative 1`] = `
-Object {
+{
   "author": "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
-  "bin": Object {
+  "bin": {
     "name": "./path/to/program/index.js",
     "shortname": "./path/to/program/index.js",
   },
   "browser": "lib/index.js",
   "bugs": "https://github.com/owner/project/issues",
-  "bundledDependencies": Array [
+  "bundledDependencies": [
     "render-blender",
     "super-streams",
   ],
-  "config": Object {
+  "config": {
     "port": "8080",
   },
-  "contributors": Array [
+  "contributors": [
     "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  "cpu": Array [
+  "cpu": [
     "!arm",
     "ia32",
     "x64",
   ],
-  "dependencies": Object {
+  "dependencies": {
     "asd": "http://asdf.com/asdf.tar.gz",
     "bar": ">=1.0.2 <2.1.2",
     "baz": ">1.0.2 <=2.3.4",
@@ -39,124 +39,124 @@ Object {
     "two": "2.x",
   },
   "description": "package description",
-  "devDependencies": Object {
+  "devDependencies": {
     "super-script": "~1.6.3",
   },
-  "directories": Object {
+  "directories": {
     "bin": "local/binaries",
     "jars": "java",
     "lib": "src/lib",
   },
-  "engines": Object {
+  "engines": {
     "node": ">=0.10.3 <15",
   },
-  "exports": Object {
-    "./feature": Object {
+  "exports": {
+    "./feature": {
       "default": "./feature.js",
       "node": "./feature-node.js",
     },
     "default": "./feature.mjs",
-    "node": Object {
+    "node": {
       "import": "./feature-node.mjs",
       "require": "./feature-node.cjs",
     },
   },
-  "files": Array [
+  "files": [
     "__tests__/*.*",
   ],
-  "funding": Array [
-    Object {
+  "funding": [
+    {
       "type": "individual",
       "url": "http://example.com/donate",
     },
     "http://example.com/donateAlso",
-    Object {
+    {
       "type": "patreon",
       "url": "https://www.patreon.com/my-account",
     },
   ],
   "homepage": "https://github.com/owner/project#readme",
-  "imports": Object {
-    "#dep": Object {
+  "imports": {
+    "#dep": {
       "default": "./dep-polyfill.js",
       "node": "dep-node-native",
     },
     "#internal/*": "./src/internal/*.js",
   },
-  "keywords": Array [
+  "keywords": [
     "jest",
     "test",
   ],
   "license": "SEE LICENSE IN LICENSE_FILE",
-  "maintainers": Array [
+  "maintainers": [
     "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  "man": Array [
+  "man": [
     "./man/bar.1",
     "./man/foo.1",
   ],
   "name": "@scope/package",
-  "optionalDependencies": Object {
+  "optionalDependencies": {
     "some-pkg": "1.x",
   },
-  "os": Array [
+  "os": [
     "!win32",
     "darwin",
     "linux",
   ],
-  "peerDependencies": Object {
+  "peerDependencies": {
     "soy-milk": "1.2",
     "tea": "2.x",
   },
-  "peerDependenciesMeta": Object {
-    "soy-milk": Object {
+  "peerDependenciesMeta": {
+    "soy-milk": {
       "optional": true,
     },
   },
   "private": true,
-  "publishConfig": Object {
+  "publishConfig": {
     "allow-same-version": true,
   },
   "repository": "gitlab:user/repo",
-  "scripts": Object {
+  "scripts": {
     "compress": "{{ run command to compress files }}",
     "prepare": "command -o lib/ -c src/index.js",
   },
   "type": "module",
   "types": "lib/index.d.ts",
   "version": "1.0.1",
-  "workspaces": Array [
+  "workspaces": [
     "./packages/*",
   ],
 }
 `;
 
 exports[`Package Parse base 1`] = `
-Object {
+{
   "author": "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
-  "bin": Object {
+  "bin": {
     "test": "lib/index.js",
   },
-  "bugs": Object {
+  "bugs": {
     "email": "project@hostname.com",
     "url": "https://github.com/owner/project/issues",
   },
-  "bundledDependencies": Array [
+  "bundledDependencies": [
     "render-blender",
     "super-streams",
   ],
-  "config": Object {
+  "config": {
     "port": "8080",
   },
-  "contributors": Array [
+  "contributors": [
     "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  "cpu": Array [
+  "cpu": [
     "!arm",
     "ia32",
     "x64",
   ],
-  "dependencies": Object {
+  "dependencies": {
     "asd": "http://asdf.com/asdf.tar.gz",
     "bar": ">=1.0.2 <2.1.2",
     "baz": ">1.0.2 <=2.3.4",
@@ -171,73 +171,73 @@ Object {
     "two": "2.x",
   },
   "description": "package description",
-  "devDependencies": Object {
+  "devDependencies": {
     "super-script": "~1.6.3",
   },
-  "directories": Object {
+  "directories": {
     "bin": "local/binaries",
     "jars": "java",
     "lib": "src/lib",
   },
-  "engines": Object {
+  "engines": {
     "node": ">=0.10.3 <15",
   },
   "exports": "./lib/index.js",
-  "files": Array [
+  "files": [
     "__tests__/*.*",
   ],
-  "funding": Array [
-    Object {
+  "funding": [
+    {
       "type": "individual",
       "url": "http://example.com/donate",
     },
   ],
   "homepage": "https://github.com/owner/project#readme",
-  "keywords": Array [
+  "keywords": [
     "jest",
     "test",
   ],
   "license": "(MIT OR Apache-2.0)",
-  "maintainers": Array [
+  "maintainers": [
     "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
   ],
-  "man": Array [
+  "man": [
     "./man/doc.1",
   ],
   "name": "test",
-  "optionalDependencies": Object {
+  "optionalDependencies": {
     "some-pkg": "1.x",
   },
-  "os": Array [
+  "os": [
     "!win32",
     "darwin",
     "linux",
   ],
-  "peerDependencies": Object {
+  "peerDependencies": {
     "soy-milk": "1.2",
     "tea": "2.x",
   },
-  "peerDependenciesMeta": Object {
-    "soy-milk": Object {
+  "peerDependenciesMeta": {
+    "soy-milk": {
       "optional": true,
     },
   },
-  "publishConfig": Object {
+  "publishConfig": {
     "allow-same-version": true,
   },
-  "repository": Object {
+  "repository": {
     "directory": "packages/react-dom",
     "type": "git",
     "url": "https://github.com/facebook/react.git",
   },
-  "scripts": Object {
+  "scripts": {
     "compress": "{{ run command to compress files }}",
     "prepare": "command -o lib/ -c src/index.js",
   },
   "type": "module",
   "types": "lib/index.d.ts",
   "version": "1.0.1",
-  "workspaces": Array [
+  "workspaces": [
     "./packages/*",
   ],
 }

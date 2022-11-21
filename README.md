@@ -1,4 +1,4 @@
-<p align="center"><img src="https://cdn.jsdelivr.net/gh/keindev/package-json-helper/media/banner.svg" alt="Package logo"></p>
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/tagproject/art/packages/package-json-helper/banner.svg" alt="Package logo"></p>
 
 <p align="center">
     <a href="https://github.com/keindev/package-json-helper/actions"><img src="https://github.com/keindev/package-json-helper/actions/workflows/build.yml/badge.svg" alt="Build Status"></a>
@@ -11,7 +11,7 @@ Package.json helper - reads / writes / controls :package:
 
 ## Install
 
-```
+```bash
 npm install package-json-helper --save-dev
 ```
 
