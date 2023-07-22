@@ -13,9 +13,6 @@ export class Person extends Info {
   getSnapshot(): JSONValue {
     const { name, url, email } = this;
 
-    if (url && email) return `${name} <${email}> (${url})`;
-    if (url || email) return { name, url, email };
-
-    return name;
+    return [name, (email && ` <${email}>`) || '', (url && ` (${url})`) || ''].join('');
   }
 }
