@@ -1,4 +1,4 @@
-import { JSONValue } from '../types.js';
+import { JSONValue } from '../types/base.js';
 import { Link } from './Link.js';
 
 export class Repository extends Link {

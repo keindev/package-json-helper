@@ -1,4 +1,4 @@
-import { BugsLocation } from '../fields/Bugs.js';
+import { BugsLocation } from '../fields/BugsLocation.js';
 import { Dependency } from '../fields/Dependency.js';
 import { DependencyMeta } from '../fields/DependencyMeta.js';
 import { ExportMap } from '../fields/ExportMap.js';
@@ -6,7 +6,7 @@ import { Funding } from '../fields/Funding.js';
 import { ImportMap } from '../fields/ImportMap.js';
 import { Person } from '../fields/Person.js';
 import { Repository } from '../fields/Repository.js';
-import { JSONObject, JSONValue, Maybe } from '../types.js';
+import { JSONObject, JSONValue, Maybe } from '../types/base.js';
 import { check, EMAIL_REGEXP, IValidator, URL_REGEXP, validators } from './validators.js';
 
 const PERSON_REGEXP =
@@ -20,7 +20,7 @@ const parser = <T>(fn: IParser<T>): IParserWrapper<T> => {
     const callback = (rawValue: JSONValue): Maybe<T> => {
       const value = fn(rawValue);
 
-      return validationList && typeof value !== 'undefined' && value !== null
+      return validationList && value !== undefined && value !== null
         ? check(value as NonNullable<T>, validationList)
         : value;
     };
@@ -215,7 +215,7 @@ export const cast = {
         Object.entries(exportMap).forEach(([key, value]) => {
           map.set(
             key,
-            typeof value === 'string' || typeof value === 'undefined' || value === null
+            typeof value === 'string' || value === undefined || value === null
               ? value ?? null
               : cast.toExportsMap(value)
           );

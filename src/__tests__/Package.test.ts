@@ -1,5 +1,6 @@
 import Package from '../Package.js';
-import { DependenciesMapProps, PackageDependency, PackageRestriction } from '../types.js';
+import { Dependencies, Restriction } from '../types/package.js';
+import { DependenciesMapProps } from '../types/properties.js';
 
 const SAMPLE_NAME = 'Barney Rubble';
 const SAMPLE_EMAIL = 'b@rubble.com';
@@ -224,7 +225,7 @@ describe('Package', () => {
       os: ['!win32', 'linux'],
     });
 
-    expect(package1.getChanges(PackageDependency.DevDependencies, package2)).toMatchObject([
+    expect(package1.getChanges(Dependencies.DevDependencies, package2)).toMatchObject([
       {
         link: 'https://www.npmjs.com/package/dependency-1',
         name: 'dependency-1',
@@ -244,7 +245,7 @@ describe('Package', () => {
         },
       },
     ]);
-    expect(package1.getChanges(PackageDependency.Engines, package2)).toMatchObject([
+    expect(package1.getChanges(Dependencies.Engines, package2)).toMatchObject([
       {
         link: undefined,
         name: 'node',
@@ -255,7 +256,7 @@ describe('Package', () => {
         },
       },
     ]);
-    expect(package1.getChanges(PackageRestriction.OS, package2)).toMatchObject([
+    expect(package1.getChanges(Restriction.OS, package2)).toMatchObject([
       {
         name: 'darwin',
         type: 'added',

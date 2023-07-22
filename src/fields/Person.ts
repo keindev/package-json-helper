@@ -1,4 +1,4 @@
-import { JSONValue } from '../types.js';
+import { JSONValue } from '../types/base.js';
 import { Info } from './Info.js';
 
 export class Person extends Info {

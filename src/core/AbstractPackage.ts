@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
-import { JSONObject, Maybe, PackageType } from '../types.js';
+import { JSONObject, Maybe } from '../types/base.js';
+import { PackageType } from '../types/package.js';
 import { parsers } from '../utils/parsers.js';
 import rules from '../utils/rules.js';
 import { check } from '../utils/validators.js';
