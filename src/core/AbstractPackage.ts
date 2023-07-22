@@ -6,15 +6,15 @@ import rules from '../utils/rules.js';
 import { check } from '../utils/validators.js';
 
 abstract class AbstractPackage {
+  // raw package object
+  protected data: JSONObject = {};
+
   #homepage?: string;
   #name = '';
   #nameWithoutScope = '';
   #scope?: string;
   #type = PackageType.Commonjs;
   #version?: string;
-
-  // raw package object
-  protected data: JSONObject = {};
 
   /** Name of the package */
   get name(): string {
