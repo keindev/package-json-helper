@@ -1,5 +1,5 @@
-import { JSONValue } from '../types.js';
-import Field from './Field.js';
+import { JSONValue } from '../types/base.js';
+import { Field } from './Field.js';
 
 // https://nodejs.org/api/packages.html#subpath-patterns
 export class ImportMap extends Field {

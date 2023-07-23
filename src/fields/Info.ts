@@ -1,4 +1,4 @@
-import { Maybe } from '../types.js';
+import { Maybe } from '../types/base.js';
 import { cast } from '../utils/parsers.js';
 import { Link } from './Link.js';
 

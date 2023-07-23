@@ -1,6 +1,6 @@
-import { Maybe } from '../types.js';
+import { Maybe } from '../types/base.js';
 import { cast } from '../utils/parsers.js';
-import Field from './Field.js';
+import { Field } from './Field.js';
 
 export abstract class Link extends Field {
   #url?: string;

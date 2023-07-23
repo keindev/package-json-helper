@@ -1,5 +1,10 @@
 import Package from '../Package.js';
-import { DependenciesMapProps, PackageDependency, PackageRestriction } from '../types.js';
+import { Dependencies, Restriction } from '../types/package.js';
+import { DependenciesMapProps } from '../types/properties.js';
+
+const SAMPLE_NAME = 'Barney Rubble';
+const SAMPLE_EMAIL = 'b@rubble.com';
+const SAMPLE_URL = 'http://barnyrubble.tumblr.com/';
 
 const base = {
   name: 'test',
@@ -12,25 +17,9 @@ const base = {
     email: 'project@hostname.com',
   },
   license: '(MIT OR Apache-2.0)',
-  author: {
-    name: 'Barney Rubble',
-    email: 'b@rubble.com',
-    url: 'http://barnyrubble.tumblr.com/',
-  },
-  contributors: [
-    {
-      name: 'Barney Rubble',
-      email: 'b@rubble.com',
-      url: 'http://barnyrubble.tumblr.com/',
-    },
-  ],
-  maintainers: [
-    {
-      name: 'Barney Rubble',
-      email: 'b@rubble.com',
-      url: 'http://barnyrubble.tumblr.com/',
-    },
-  ],
+  author: { name: SAMPLE_NAME, email: SAMPLE_EMAIL, url: SAMPLE_URL },
+  contributors: [{ name: SAMPLE_NAME, email: SAMPLE_EMAIL, url: SAMPLE_URL }],
+  maintainers: [{ name: SAMPLE_NAME, email: SAMPLE_EMAIL, url: SAMPLE_URL }],
   funding: {
     type: 'individual',
     url: 'http://example.com/donate',
@@ -108,9 +97,9 @@ const alternative = {
     url: 'https://github.com/owner/project/issues',
   },
   license: 'SEE LICENSE IN LICENSE_FILE',
-  author: 'Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)',
-  contributors: ['Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)'],
-  maintainers: ['Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)'],
+  author: `${SAMPLE_NAME} <${SAMPLE_EMAIL}> (${SAMPLE_URL})`,
+  contributors: [`${SAMPLE_NAME} (${SAMPLE_URL})`],
+  maintainers: [`${SAMPLE_NAME} <${SAMPLE_EMAIL}>`],
   funding: [
     {
       type: 'individual',
@@ -182,6 +171,27 @@ describe('Package', () => {
     ).toMatchObject(['zip', 'zap']);
   });
 
+  it('Check Person variations', () => {
+    const maintainer = pkgAlternative.maintainers.get(SAMPLE_NAME);
+    const contributor = pkgAlternative.contributors.get(SAMPLE_NAME);
+
+    expect(pkgBase.author?.name).toBe(SAMPLE_NAME);
+    expect(pkgBase.author?.email).toBe(SAMPLE_EMAIL);
+    expect(pkgBase.author?.url).toBe(SAMPLE_URL);
+
+    expect(pkgAlternative.author?.name).toBe(SAMPLE_NAME);
+    expect(pkgAlternative.author?.email).toBe(SAMPLE_EMAIL);
+    expect(pkgAlternative.author?.url).toBe(SAMPLE_URL);
+
+    expect(maintainer?.name).toBe(SAMPLE_NAME);
+    expect(maintainer?.email).toBe(SAMPLE_EMAIL);
+    expect(maintainer?.url).toBeUndefined();
+
+    expect(contributor?.name).toBe(SAMPLE_NAME);
+    expect(contributor?.email).toBeUndefined();
+    expect(contributor?.url).toBe(SAMPLE_URL);
+  });
+
   it('Check wrong version dependencies', () => {
     expect(
       pkgBase.getWrongVersionDependencies(
@@ -215,7 +225,7 @@ describe('Package', () => {
       os: ['!win32', 'linux'],
     });
 
-    expect(package1.getChanges(PackageDependency.DevDependencies, package2)).toMatchObject([
+    expect(package1.getChanges(Dependencies.DevDependencies, package2)).toMatchObject([
       {
         link: 'https://www.npmjs.com/package/dependency-1',
         name: 'dependency-1',
@@ -235,7 +245,7 @@ describe('Package', () => {
         },
       },
     ]);
-    expect(package1.getChanges(PackageDependency.Engines, package2)).toMatchObject([
+    expect(package1.getChanges(Dependencies.Engines, package2)).toMatchObject([
       {
         link: undefined,
         name: 'node',
@@ -246,7 +256,7 @@ describe('Package', () => {
         },
       },
     ]);
-    expect(package1.getChanges(PackageRestriction.OS, package2)).toMatchObject([
+    expect(package1.getChanges(Restriction.OS, package2)).toMatchObject([
       {
         name: 'darwin',
         type: 'added',

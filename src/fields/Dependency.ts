@@ -1,7 +1,7 @@
 import semver from 'semver';
 
-import { JSONValue, Maybe } from '../types.js';
-import Field from './Field.js';
+import { JSONValue, Maybe } from '../types/base.js';
+import { Field } from './Field.js';
 
 export class Dependency extends Field {
   readonly name: string;

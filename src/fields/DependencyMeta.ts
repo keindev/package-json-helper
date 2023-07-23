@@ -1,5 +1,5 @@
-import { JSONValue } from '../types.js';
-import Field from './Field.js';
+import { JSONValue } from '../types/base.js';
+import { Field } from './Field.js';
 
 /** This field lists some extra information related to the dependencies listed in the peerDependencies field. */
 export class DependencyMeta extends Field {

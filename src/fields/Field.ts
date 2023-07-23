@@ -1,5 +1,5 @@
-import { JSONValue } from '../types.js';
+import { JSONValue } from '../types/base.js';
 
-export default abstract class Field {
+export abstract class Field {
   abstract getSnapshot(): JSONValue;
 }

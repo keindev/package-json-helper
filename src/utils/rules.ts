@@ -1,4 +1,4 @@
-import { PackageType } from '../types.js';
+import { PackageType } from '../types/package.js';
 import { URL_REGEXP, validators } from './validators.js';
 
 const NAME_MAX_LENGTH = 214;

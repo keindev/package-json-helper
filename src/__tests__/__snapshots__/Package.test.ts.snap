@@ -17,7 +17,7 @@ exports[`Package Parse alternative 1`] = `
     "port": "8080",
   },
   "contributors": [
-    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
+    "Barney Rubble (http://barnyrubble.tumblr.com/)",
   ],
   "cpu": [
     "!arm",
@@ -89,7 +89,7 @@ exports[`Package Parse alternative 1`] = `
   ],
   "license": "SEE LICENSE IN LICENSE_FILE",
   "maintainers": [
-    "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)",
+    "Barney Rubble <b@rubble.com>",
   ],
   "man": [
     "./man/bar.1",

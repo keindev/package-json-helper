@@ -50,13 +50,13 @@
 ## Constructor
 
 ```typescript
-constructor(value?: string | JSONObject, manager?: PackageManager): Package
+constructor(value?: string | JSONObject, manager?: ManagerType): Package
 ```
 
-| Name      | Type                   | Description                                                       |
-| :-------- | :--------------------- | :---------------------------------------------------------------- |
-| `value`   | _string \| JSONObject_ | `package.json` file path or `json`                                |
-| `manager` | _enum_                 | package manager using in project, by default `PackageManager.NPM` |
+| Name      | Type                   | Description                                                    |
+| :-------- | :--------------------- | :------------------------------------------------------------- |
+| `value`   | _string \| JSONObject_ | `package.json` file path or `json`                             |
+| `manager` | _enum_                 | package manager using in project, by default `ManagerType.NPM` |
 
 ## Methods
 
@@ -77,7 +77,7 @@ Bump package version
 Return changes in package dependencies or restrictions
 
 ```typescript
-export enum PackageDependency {
+export enum Dependencies {
   // https://docs.npmjs.com/files/package.json#engines
   Engines = 'engines',
   // https://docs.npmjs.com/files/package.json#dependencies
@@ -90,7 +90,7 @@ export enum PackageDependency {
   OptionalDependencies = 'optionalDependencies',
 }
 
-export enum PackageRestriction {
+export enum Restriction {
   // https://docs.npmjs.com/files/package.json#bundleddependencies
   BundledDependencies = 'bundledDependencies',
   // https://docs.npmjs.com/files/package.json#os
@@ -102,10 +102,10 @@ export enum PackageRestriction {
 
 #### Parameters
 
-| Name       | Type                                      | Description                                |
-| :--------- | :---------------------------------------- | :----------------------------------------- |
-| `property` | _PackageDependency \| PackageRestriction_ | Property name from enums                   |
-| `pkg`      | _Package_                                 | Previous version package object to compare |
+| Name       | Type                          | Description                                |
+| :--------- | :---------------------------- | :----------------------------------------- |
+| `property` | _Dependencies \| Restriction_ | Property name from enums                   |
+| `pkg`      | _Package_                     | Previous version package object to compare |
 
 ### getMissingDependencies
 

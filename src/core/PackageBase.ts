@@ -1,16 +1,15 @@
-import { BugsLocation } from '../fields/Bugs.js';
+import { BugsLocation } from '../fields/BugsLocation.js';
 import { Dependency } from '../fields/Dependency.js';
 import { DependencyMeta } from '../fields/DependencyMeta.js';
 import { ExportMap } from '../fields/ExportMap.js';
-import Field from '../fields/Field.js';
+import { Field } from '../fields/Field.js';
 import { Funding } from '../fields/Funding.js';
 import { ImportMap } from '../fields/ImportMap.js';
 import { Person } from '../fields/Person.js';
 import { Repository } from '../fields/Repository.js';
-import {
-    DependenciesMapPropsMap, IPackageProps, JSONObject, JSONValue, StringListPropsMap, StringMapPropsMap,
-    StringPropsMap,
-} from '../types.js';
+import { JSONObject, JSONValue } from '../types/base.js';
+import { DependenciesMapPropsMap, StringListPropsMap, StringMapPropsMap, StringPropsMap } from '../types/maps.js';
+import { IPackageProps } from '../types/properties.js';
 import { cast } from '../utils/parsers.js';
 import AbstractPackage from './AbstractPackage.js';
 

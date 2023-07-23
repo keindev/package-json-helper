@@ -4,19 +4,23 @@ import path from 'path';
 import semver from 'semver';
 
 import PackageBase from './core/PackageBase.js';
-import {
-    DependenciesMapProps, IPackageChange, JSONObject, PackageChangeCompareResult, PackageDependency,
-    PackageDependencyChangeType, PackageInstallCommandMap, PackageManager, PackageRestriction,
-} from './types.js';
+import { CompareResult, JSONObject } from './types/base.js';
+import { ChangeType, Dependencies, IChange, ManagerType, Restriction } from './types/package.js';
+import { DependenciesMapProps } from './types/properties.js';
 import { getChangeType, getLink, getRestrictionName, getVersion } from './utils/dependencies.js';
 
 const DEFAULT_FILE_PATH = path.resolve(process.cwd(), 'package.json');
 
+const PackageInstallCommandMap = {
+  [ManagerType.NPM]: 'install',
+  [ManagerType.Yarn]: 'add',
+};
+
 export class Package extends PackageBase {
   #filePath = DEFAULT_FILE_PATH;
-  #manager = PackageManager.NPM;
+  #manager = ManagerType.NPM;
 
-  constructor(value?: string | JSONObject, manager?: PackageManager) {
+  constructor(value?: string | JSONObject, manager?: ManagerType) {
     super();
 
     if (typeof value === 'object') this.reset(value);
@@ -39,17 +43,17 @@ export class Package extends PackageBase {
     }
   }
 
-  getChanges(property: PackageDependency | PackageRestriction, pkg: Package): IPackageChange[] {
+  getChanges(property: Dependencies | Restriction, pkg: Package): IChange[] {
     switch (property) {
-      case PackageDependency.Dependencies:
-      case PackageDependency.DevDependencies:
-      case PackageDependency.Engines:
-      case PackageDependency.OptionalDependencies:
-      case PackageDependency.PeerDependencies:
+      case Dependencies.Dependencies:
+      case Dependencies.DevDependencies:
+      case Dependencies.Engines:
+      case Dependencies.OptionalDependencies:
+      case Dependencies.PeerDependencies:
         return this.getDependenciesChanges(property, pkg);
-      case PackageRestriction.BundledDependencies:
-      case PackageRestriction.CPU:
-      case PackageRestriction.OS:
+      case Restriction.BundledDependencies:
+      case Restriction.CPU:
+      case Restriction.OS:
         return this.getRestrictionsChanges(property, pkg);
       default:
         return [];
@@ -96,8 +100,8 @@ export class Package extends PackageBase {
     await fs.writeFile(filePath ?? this.#filePath, this.toString() + '\n');
   }
 
-  private getDependenciesChanges(property: PackageDependency, pkg: Package): IPackageChange[] {
-    const changes: IPackageChange[] = [];
+  private getDependenciesChanges(property: Dependencies, pkg: Package): IChange[] {
+    const changes: IChange[] = [];
     const currDeps = this[property];
     const prevDeps = pkg[property];
 
@@ -105,7 +109,7 @@ export class Package extends PackageBase {
       const current = getVersion(value);
       const link = getLink(property, name);
       let previous;
-      let type = PackageDependencyChangeType.Added;
+      let type = ChangeType.Added;
 
       if (prevDeps.has(name)) {
         previous = getVersion(prevDeps.get(name));
@@ -119,31 +123,29 @@ export class Package extends PackageBase {
     prevDeps.forEach((previous, name) => {
       changes.push({
         name,
-        type: PackageDependencyChangeType.Removed,
+        type: ChangeType.Removed,
         link: getLink(property, name),
         value: { previous: getVersion(previous) },
       });
     });
 
-    return [...changes.values()].filter(change => change.type !== PackageDependencyChangeType.Unchanged);
+    return [...changes.values()].filter(change => change.type !== ChangeType.Unchanged);
   }
 
-  private getRestrictionsChanges(property: PackageRestriction, pkg: Package): IPackageChange[] {
-    const changes: IPackageChange[] = [];
+  private getRestrictionsChanges(property: Restriction, pkg: Package): IChange[] {
+    const changes: IChange[] = [];
     const restrictions = [...pkg[property].values()];
     const compareMap = {
-      [PackageChangeCompareResult.Less]: PackageDependencyChangeType.Changed,
-      [PackageChangeCompareResult.More]: PackageDependencyChangeType.Changed,
-      [PackageChangeCompareResult.Equal]: PackageDependencyChangeType.Unchanged,
+      [CompareResult.Less]: ChangeType.Changed,
+      [CompareResult.More]: ChangeType.Changed,
+      [CompareResult.Equal]: ChangeType.Unchanged,
     };
 
     changes.push(
       ...[...this[property].values()].map(current => {
         const index = restrictions.indexOf(current);
         const previous = restrictions[index];
-        const type = previous
-          ? compareMap[current.localeCompare(previous) as PackageChangeCompareResult]
-          : PackageDependencyChangeType.Added;
+        const type = previous ? compareMap[current.localeCompare(previous) as CompareResult] : ChangeType.Added;
 
         if (previous) restrictions.splice(index, 1);
 
@@ -151,12 +153,12 @@ export class Package extends PackageBase {
       }),
       ...restrictions.map(previous => ({
         name: getRestrictionName(previous),
-        type: PackageDependencyChangeType.Removed,
+        type: ChangeType.Removed,
         value: { previous },
       }))
     );
 
-    return [...changes.values()].filter(change => change.type !== PackageDependencyChangeType.Unchanged);
+    return [...changes.values()].filter(change => change.type !== ChangeType.Unchanged);
   }
 }
 
