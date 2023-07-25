@@ -32,6 +32,10 @@
 
 </details>
 
+# :memo: Internal changes
+
+- Fix example [`251691b`](https://github.com/keindev/package-json-helper/commit/251691b697f858d30b5ffe521e32d8572d977d3d)
+
 ---
 
 # Contributors
