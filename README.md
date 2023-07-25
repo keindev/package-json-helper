@@ -18,7 +18,7 @@ npm install package-json-helper --save-dev
 ## Usage
 
 ```typescript
-import Package from 'package-json-helper';
+import { Package } from 'package-json-helper';
 
 const pkg = new Package();
 
