@@ -1,13 +1,10 @@
 {
   "name": "package-json-helper",
-  "version": "5.0.2",
+  "version": "6.0.0",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "license": "MIT",
   "homepage": "https://github.com/keindev/package-json-helper#readme",
-  "author": {
-    "name": "Daniil Ryazanov",
-    "email": "kein@tagproject.ru"
-  },
+  "author": "Daniil Ryazanov <kein@tagproject.ru>",
   "keywords": [
     "helper",
     "json",
@@ -27,7 +24,7 @@
     "url": "git+https://github.com/keindev/package-json-helper.git"
   },
   "engines": {
-    "node": "^14.13.1 || >=16.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "build": "run-s build:*",
@@ -48,12 +45,12 @@
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "dependencies": {
-    "execa": "^7.1.1",
+    "execa": "^8.0.0",
     "lodash.clonedeep": "^4.5.0",
     "semver": "^7.5.4"
   },
   "devDependencies": {
-    "@tagproject/ts-package-shared-config": "^11.0.0",
+    "@tagproject/ts-package-shared-config": "^11.0.1",
     "@types/lodash.clonedeep": "^4.5.7",
     "@types/semver": "^7.5.0"
   }
