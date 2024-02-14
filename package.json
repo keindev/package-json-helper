@@ -1,6 +1,6 @@
 {
   "name": "package-json-helper",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Helper for updating, comparing and fetching changes in package.json",
   "license": "MIT",
   "homepage": "https://github.com/keindev/package-json-helper#readme",
@@ -45,13 +45,13 @@
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "dependencies": {
-    "execa": "^8.0.0",
+    "execa": "^8.0.1",
     "lodash.clonedeep": "^4.5.0",
-    "semver": "^7.5.4"
+    "semver": "^7.6.0"
   },
   "devDependencies": {
-    "@tagproject/ts-package-shared-config": "^11.0.1",
-    "@types/lodash.clonedeep": "^4.5.7",
-    "@types/semver": "^7.5.0"
+    "@tagproject/ts-package-shared-config": "^11.0.4",
+    "@types/lodash.clonedeep": "^4.5.9",
+    "@types/semver": "^7.5.7"
   }
 }
