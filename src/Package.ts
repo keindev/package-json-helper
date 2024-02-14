@@ -17,8 +17,8 @@ const PackageInstallCommandMap = {
 };
 
 export class Package extends PackageBase {
-  #filePath = DEFAULT_FILE_PATH;
-  #manager = ManagerType.NPM;
+  readonly #filePath = DEFAULT_FILE_PATH;
+  readonly #manager: ManagerType = ManagerType.NPM;
 
   constructor(value?: string | JSONObject, manager?: ManagerType) {
     super();
