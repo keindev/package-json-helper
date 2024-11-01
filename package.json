@@ -45,7 +45,7 @@
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "dependencies": {
-    "execa": "^8.0.1",
+    "execa": "^9.5.1",
     "lodash.clonedeep": "^4.5.0",
     "semver": "^7.6.0"
   },
